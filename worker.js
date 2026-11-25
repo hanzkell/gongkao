@@ -26,7 +26,7 @@ async function saveKey(key){
   });
 }
 async function remote(relative){
-  const res=await fetch(new URL(relative,scope),{cache:'no-store',credentials:'omit',redirect:'error'});
+  const res=await fetch(new URL(relative,scope),{cache:relative.startsWith('vault/')?'default':'no-store',credentials:'omit',redirect:'error'});
   if(!res.ok)throw Error('发布文件读取失败，请稍后重试。');
   return res;
 }
