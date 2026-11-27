@@ -1137,6 +1137,7 @@ function questionTarget(id, preferred) {
   return target ? {route:slugFor(nodes[target]), question:id} : {route:'library',filters:{qid:id}};
 }
 function routeName(route) {
+  if(view?.title && route===view.key)return view.title;
   if(view && route.startsWith('skills/'))return subjectNames[route.split('/')[1]]+'技能';
   if(modulePracticePages.has(route))return modulePracticePages.get(route).title;
   if(isWordingRoute(route))return wordingPracticePages.get(route)?.name||'时政措辞辨析';
@@ -1415,7 +1416,7 @@ function readingLayout(side,body,extraClass=''){
   }
   return '<div class="strategyMobile">'+tocTrigger()+'</div><div class="tocLayout">'+side+article+'</div>';
 }
-function renderStrategy() {
+function strategyMarkup() {
   const group=strategies.groups.find(g=>g.id===path.split('/')[1])||strategies.groups[0];
   const groupRoute='strategy/'+group.id;
   const page=strategyPages.get(path)||group;
@@ -1436,7 +1437,7 @@ function renderStrategy() {
     if(page.skills?.length)body+=section('对应技能训练','<div class="pillrow">'+page.skills.map(id=>controlLink(slugFor(nodes[id]),nodes[id].title)).join('')+'</div>');
     if(group.footerLink)body+='<p class="guideMore">'+controlLink(group.footerLink[0],group.footerLink[1])+'</p>';
   }
-  root.innerHTML=readingLayout(side,body);
+  return readingLayout(side,body);
 }
 function renderAbout() {
   root.innerHTML='<article class="reader aboutPage">'+backControl('index/class')+'<h1>关于</h1>'+
@@ -1645,7 +1646,7 @@ function paintPage(next,keepContent=false) {
     }
     else if(isWordingRoute(path))renderWording();
     else if(area==='practice')renderPractice();
-    else if(area==='strategy')renderStrategy();
+    else if(area==='strategy')root.innerHTML=strategyMarkup();
     else if(area==='library')renderLibrary();
     else if(area==='sources')renderOriginals();
     else if(area==='about')renderAbout();
@@ -1798,6 +1799,7 @@ function renderRoute() {
     if(entering||changed)$('closeEntry').focus({preventScroll:true});
     document.title=node.title+' · 考公突击';
     restorePosition(readerBody);
+    window.studyPages.ready();
     return;
   }
   const resume=reader.open && mountedPageId===next.viewId && !readerHostDirty;
@@ -1808,7 +1810,7 @@ function renderRoute() {
     readerHostDirty=false;
   }
   paintPage(next,resume);
-  prepareNext(next,sequence);window.studyPages.deferFont();
+  prepareNext(next,sequence);window.studyPages.ready();
 }
 function closeReader() {
   if(!reader.open)return;
@@ -2037,7 +2039,8 @@ listen(window,'resize',()=>{if(reader.open)syncEntryTop();});
 listen(window,'pagehide',savePlace);
 if(compile)return compile({nodes,qs,mats,study,training,reviewSources,skillNodes,skillTree,courses,eventYears,
   modulePracticePages,wordingPracticePages,wordingRoute,wordingTopic,wordingDirectory,wordingPage,
-  resolveRoute,questionTarget,initial,useView,groups,unitsOf,slugFor,directoryMarkup,tocAddress,canonicalId});
+  resolveRoute,questionTarget,initial,useView,groups,unitsOf,slugFor,directoryMarkup,tocAddress,canonicalId,
+  strategyPages,strategyMarkup,defaultStrategyRoute,strategyTabs,strategyRedirects});
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 renderRoute();
 return {render:renderRoute, picker:openPicker, cancelPreview:stopPreview, dispose(){

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-launching>
 <head><script>window.kbProtectedDownloads=true;if(location.pathname.startsWith("/gongkao/"+"read/"))location.replace("/gongkao/"+location.pathname.slice(("/gongkao/"+"read/").length)+location.search+location.hash);</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,577 @@
   } catch {}
 })();
 </script>
-<link rel="stylesheet" href="assets/study.css">
-<style id="webTitleFont" media="not all">
-@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/title.woff2") format("woff2")}
+<link rel="preload" as="script" href="assets/study-app.js?v=bac9ef071e37f759" fetchpriority="high">
+<style>
+:root,:root[data-theme="light"]{color-scheme:light;--bg:#faf6ee;--ink:#241916;--body:#3d2f2a;--muted:#6f5f56;--accent:#9e2a22;--accent-hover:#7d1f19;--line:#ddd2c2;--input-line:#c4b5a0;--gold:#b58322;--tint:#efe3d2;--soft:#f3ece0;--header-bg:#8b2320;--header-border:#d8ad4c;--header-ink:#fdf8ee;--header-link:#f3dfd5;--header-muted:#ebd0c2;--header-active:#efc562;--header-search-border:rgb(255 244 224 / 35%);--btn-bg:#8b2320;--btn-hover:#711b18;--btn-ink:#fdf8ee;--toast-bg:#2a1a17;--toast-ink:#fdf8ee;--right-line:#3e6b53;--right-bg:#eaf1ec;--wrong-line:#b43c32;--wrong-bg:#f9eae7;--backdrop:rgb(32 16 14 / 42%);--shadow:0 20px 80px rgb(38 16 12 / 20%);--scroll-thumb:#cbbca8;--focus-ring:#c9922b;--card-bg:#fffcf6;--card-head-bg:#f6efe2;--card-def-bg:#f8f1e4;--card-sub-bg:#fbf6ec;--card-border:#d4c3a7;--card-badge-border:#d9bf8c;--card-inset:rgb(255 253 248 / 82%);--card-shadow:0 0 0 1px rgb(139 35 32 / 8%),-20px 0 48px -12px rgb(38 16 12 / 18%),20px 0 48px -12px rgb(38 16 12 / 18%);--serif:"Songti SC","STSong","Noto Serif CJK SC",serif;--sans:"PingFang SC","Microsoft Yahei",sans-serif}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#151211;--ink:#f4ece0;--body:#d8cdc1;--muted:#a39589;--accent:#e56d5e;--accent-hover:#f08476;--line:#3a302b;--input-line:#54453e;--gold:#daa94a;--tint:#2e231f;--soft:#211b19;--header-bg:#4d1513;--header-border:#cfa042;--header-ink:#f8efe2;--header-link:#e4ccc0;--header-muted:#d6b8aa;--header-active:#ecc25e;--header-search-border:rgb(232 190 90 / 35%);--btn-bg:#a9322b;--btn-hover:#bf3c34;--btn-ink:#fff9f0;--toast-bg:#362520;--toast-ink:#f8efe2;--right-line:#5fa37d;--right-bg:#182920;--wrong-line:#e26458;--wrong-bg:#301a19;--backdrop:rgb(8 4 4 / 64%);--shadow:0 20px 80px rgb(0 0 0 / 55%);--scroll-thumb:#594a42;--focus-ring:#e8be5a;--card-bg:#1c1715;--card-head-bg:#241d1a;--card-def-bg:#261f1b;--card-sub-bg:#211b18;--card-border:#4d3e36;--card-badge-border:#6e5536;--card-inset:rgb(255 235 200 / 8%);--card-shadow:0 0 0 1px rgb(218 169 74 / 15%),-24px 0 56px -6px rgb(0 0 0 / 60%),24px 0 56px -6px rgb(0 0 0 / 60%)}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.7 var(--sans)}
+button,input,select,textarea{font:inherit;color:inherit}
+button,a,summary,select{touch-action:manipulation}
+a,.text{color:var(--ink);text-underline-offset:4px}
+button,select,summary{cursor:pointer}
+button{background:none;border:0}
+button:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+.wrap{max-width:1220px;margin:auto;padding-inline:clamp(20px,4vw,58px)}
+header{background:var(--header-bg);color:var(--header-ink);border-bottom:2px solid var(--header-border)}
+header .wrap{display:flex;align-items:center;gap:46px;min-height:65px}
+.brand{font:600 27px/1.1 var(--serif);letter-spacing:.03em}
+header nav,.tabs{display:flex;gap:24px}
+header a,.tabs a{text-decoration:none;display:inline-block;padding:17px 0 13px;border-bottom:3px solid transparent}
+header a{color:var(--header-link);font-size:15px}
+header a[aria-current=page]{border-color:var(--header-active);color:var(--header-ink)}
+.mast,.subhead,.pair,.buttons,.pager{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.mast{padding:32px 0 20px}
+.mast h1,.reader h1{font:600 clamp(32px,4vw,53px)/1.2 var(--serif);color:var(--ink);margin:0}
+.search input,select,textarea{border:1px solid var(--input-line);background:var(--bg);padding:8px 12px;border-radius:4px}
+.search input{width:min(30vw,330px)}
+.tabs{border-bottom:1px solid var(--gold);gap:24px}
+.tabs a{padding:8px 1px;font-weight:600}
+.tabs a[aria-current=page]{border-color:var(--accent);color:var(--accent)}
+.results{min-width:0}
+h2,h3{color:var(--ink)}
+.results h2,.reader h2{font:600 clamp(23px,3vw,34px)/1.35 var(--serif);margin:0}
+.meta,small,.muted{color:var(--muted);font-size:13px}
+.intro{margin:6px 0 18px}
+.section{margin:20px 0 8px;font:600 16px/1.4 var(--sans);color:var(--accent)}
+.entry{display:grid;grid-template-columns:minmax(140px,.8fr) minmax(0,1fr);gap:16px;align-items:baseline;border-top:1px solid var(--line);text-decoration:none;padding:14px 7px}
+.entry strong{font:600 20px/1.5 var(--serif)}
+.entry span{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.entry[data-recent=true]{background:var(--tint);box-shadow:inset 3px 0 var(--accent)}
+.btn{border:1px solid var(--line);padding:8px 16px;border-radius:4px;color:var(--ink);background:var(--bg);text-decoration:none;display:inline-block}
+.primary{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.pager{margin-top:20px;justify-content:flex-start}
+.reader{width:min(100%,812px);margin:auto;padding:33px 0 80px}
+.back{color:var(--accent);text-decoration:underline;text-underline-offset:5px;padding:4px 0}
+.reader h1{margin:24px 0 14px}
+.definition{font:400 clamp(20px,2.2vw,28px)/1.7 var(--serif);color:var(--ink)}
+.reader section,.qsection{border-top:1px solid var(--line);padding:19px 0 7px;margin-top:16px}
+.reader h2{font-size:23px}
+.reader p,.results p,.qtext,.answer{overflow-wrap:anywhere}
+.reader details,.results details{border-bottom:1px solid var(--line);padding:7px 0}
+.reader summary,.results summary{padding:5px 0;color:var(--ink)}
+.qtext,.answer,.mat{white-space:pre-wrap}
+.mat,.answer{background:var(--soft);padding:12px 16px}
+.options{border-top:1px solid var(--line);margin:14px 0}
+.opt{display:flex;align-items:baseline;gap:12px;min-height:46px;border-bottom:1px solid var(--line);padding:9px 3px;cursor:pointer}
+.opt:has(:checked){background:var(--tint);color:var(--ink)}
+input[type=radio]{accent-color:var(--accent)}
+.buttons{justify-content:flex-start;flex-wrap:wrap;margin:10px 0}
+.buttons a{font-size:13px}
+.units{padding:10px 0}
+.pillrow{display:flex;flex-wrap:wrap;gap:8px 16px}
+.questionPic{display:block;max-width:100%;height:auto;background:white;}
+.figureZoom{display:block;width:fit-content;max-width:100%;margin:8px 0;cursor:zoom-in;}
+.illustratedMaterial{margin:12px 0 16px;}
+.choice span:has(.questionPic){min-width:0;}
+.figurePages{display:block;margin-block:6px;}
+.disclaimer{border-left:3px solid var(--gold);padding-left:12px}
+.skip{position:absolute;left:-10000px}
+.skip:focus{left:5px;top:5px;background:var(--bg);color:var(--ink);z-index:2}
+.empty{color:var(--muted);padding:20px 0}
+textarea{resize:vertical;width:100%;min-height:100px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.reference{padding:5px 0}
+
+.domain{font-size:14px;display:inline-flex;align-items:center;gap:10px}
+.domain select{padding:4px 22px 4px 8px;border:1px solid var(--line);background:var(--bg);border-radius:3px}
+.reader .kind{font-size:14px;color:var(--muted);letter-spacing:.06em;margin:1.4rem 0 0}
+@media(max-width:720px){
+.mast{padding:22px 0 8px;flex-wrap:wrap}
+.search input{width:100%}
+.search{width:100%}
+.subhead{align-items:baseline;flex-wrap:wrap;gap:2px 12px}
+.entry{grid-template-columns:1fr;gap:3px}
+.entry strong{font-size:19px}
+.entry span{-webkit-line-clamp:1}
+.reader{padding-top:18px}
+.reader h1{margin-top:18px}
+.tabs{gap:20px}
+.tabs a{padding:8px 2px}
+.meta{font-size:12px}
+.opt{padding:12px 0}
+.pager{gap:10px}
+}
+
+
+
+/* Knowledge directories */
+.results > details {margin:12px 0 18px;}
+.topicSummary {max-width:48em; line-height:1.85;}
+.heatRow {grid-template-columns:minmax(0,.85fr) minmax(0,1fr) max-content;gap:18px;}
+.entry .frequency {display:block; text-align:right; color:var(--ink); white-space:nowrap;}
+.frequency b {font:600 1.35rem var(--serif); font-variant-numeric:tabular-nums;}
+.heatRow strong {font-size:1.18rem;}
+button, a, select, input {scroll-margin-top:1rem;}
+button:focus-visible, a:focus-visible {outline-offset:1px;}
+.reader h1 {line-height:1.32;}
+.reader p, .reader blockquote, .work, .definition {overflow-wrap:anywhere;}
+.reader p, .reader blockquote {max-width:52em;}
+.reader .definition {margin-top:.7em;}
+.reader h3, .results h3:not(.section) {font-size:1.04rem;}
+blockquote {margin:12px 0; padding-left:1em; border-left:2px solid var(--gold); color:var(--body);}
+.reader .kind {margin:22px 0 0;}
+.kind + h1 {margin-top:.35em;}
+.questionRow {border-bottom:1px solid var(--line);}
+.questionToggle {width:100%; min-height:48px; padding:.75em 0; display:flex; gap:1rem; align-items:baseline; justify-content:space-between; text-align:left; color:var(--ink);}
+.questionToggle[aria-expanded=true] {font-weight:650;}
+.pillrow {align-items:baseline;}
+.questionLine {border-top:1px solid var(--line); padding:.75rem 0;}
+.questionLine small,.pick small {display:block; margin-top:.25rem;}
+.results details > summary,.reader details > summary {min-height:38px;}
+.fulltext,.stem,.quote,.choice span,.definition {white-space:pre-wrap;}
+.work {margin:12px 0; color:var(--body);}
+.work-head,.actions,.introRow,.linkbar,.dialogHead {display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.work-head {font-size:.82rem; color:var(--muted);}
+.work .stem {font-size:1.08rem; color:var(--ink);}
+.choices {display:grid; gap:.3rem; margin:16px 0;}
+.choice {display:flex; gap:1rem; border:1px solid var(--line); padding:.65rem .8rem; align-items:baseline; text-align:left;}
+.choice.chosen {box-shadow:inset 3px 0 var(--accent); background:var(--tint);}
+.choice.right {border-color:var(--right-line); background:var(--right-bg);}
+.choice.wrong {border-color:var(--wrong-line); background:var(--wrong-bg);}
+.primary,.outline {display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--line); border-radius:4px; padding:.4rem .9rem;}
+button.primary {color:var(--btn-ink); background:var(--btn-bg); border-color:var(--btn-bg);}
+button.primary:hover:enabled {background:var(--btn-hover); border-color:var(--btn-hover);}
+.quiet {text-decoration:underline; text-underline-offset:4px; padding:.5rem .1rem; color:var(--ink);}
+.work .actions, .linkbar {margin:1rem 0;}
+.linkbar {border-top:1px solid var(--line); padding-top:.8rem;}
+.linkbar span,.note,.warn,.work small {font-size:.85rem; color:var(--muted);}
+.warn {color:var(--accent);}
+.linkbar .outline {font-size:.85rem; padding:.2rem .55rem;}
+.answerbox,.callout,.calculation {background:var(--soft); padding:1rem; margin:.8rem 0;}
+.answerbox a {margin-left:.5rem; font-size:.85rem;}
+figure {margin:1rem 0;}
+.note textarea {display:block; margin-top:.5rem;}
+.ruleTable [role=row], .wordPair, .argumentNotes > div, .logicFlow {display:flex; align-items:baseline; gap:1.25em; flex-wrap:wrap;}
+.ruleTable [role=row], .argumentNotes > div {border-bottom:1px solid var(--line); padding:.5em 0;}
+.wordPair > div,.logicFlow > div {flex:1 1 13rem;}
+.wordPair dd,.argumentNotes dd {margin:0;}
+.argumentNotes dd {flex:1; min-width:10rem;}
+.logicFlow small,.logicFlow strong {display:block;}
+.dialog {width:min(625px,94vw); max-height:82vh; border:1px solid var(--line); border-radius:7px; padding:1rem 1.4rem; background:var(--bg);color:var(--body);}
+.dialog::backdrop {background:var(--backdrop);}
+.dialogHead,.pick {display:flex; justify-content:space-between; align-items:center; gap:12px;}
+.dialogHead h2 {font:600 1.5rem var(--serif);}
+.dialog .searchbox input {width:100%; margin:6px 0 12px; border:1px solid var(--line); background:var(--bg); padding:.5rem;}
+.pickList {overflow:auto; max-height:42vh; margin-top:1rem;}
+.pick {padding:.7rem 0; border-top:1px solid var(--line);}
+.pick button {white-space:nowrap;}
+.toast {position:fixed; left:50%; bottom:2rem; transform:translateX(-50%); background:var(--toast-bg); color:var(--toast-ink); border:1px solid var(--line); border-radius:4px; padding:.5rem 1rem;}
+@media(max-width:720px) {
+  .heatRow {grid-template-columns:minmax(0,1fr) auto; gap:3px 10px;}
+  .heatRow .entrySummary {grid-column:1 / -1;grid-row:2;}
+  .heatRow .frequency {grid-column:2; grid-row:1; align-self:center; font-size:.8rem;}
+  .reader {min-width:0;}
+}
+
+.entryTitle {min-width:0;}
+.entryTitle small {display:block; margin:.18rem 0 0; color:var(--muted);}
+
+.headerTools {display:flex;align-items:center;gap:8px;flex:none;margin-inline-start:auto;}
+header .headerIconBtn {display:inline-grid;place-items:center;width:32px;height:32px;padding:0;border:1px solid rgb(255 244 224 / 32%);border-radius:999px;color:var(--header-ink);background:rgb(0 0 0 / 16%);text-decoration:none;transition:background-color .15s,border-color .15s,color .15s;}
+header .headerIconBtn:hover {background:rgb(255 244 224 / 16%);border-color:var(--header-active);color:var(--header-ink);}
+header a.headerIconBtn[aria-current=page] {border-color:var(--header-active);background:rgb(239 197 98 / 22%);color:var(--header-active);}
+.directory {max-width:1040px;margin:auto;padding-bottom:64px;}
+.directoryHead {display:flex;gap:20px;align-items:center;justify-content:space-between;padding:24px 0 14px;}
+.directory h1 {min-width:0;margin:0;font:600 clamp(25px,3.1vw,40px)/1.35 var(--serif);color:var(--ink);}
+.resultHead {display:grid;grid-template-columns:1fr auto;align-items:baseline;column-gap:12px;padding-bottom:9px;}
+.resultMeta {grid-row:1;grid-column:1;display:flex;align-items:center;flex-wrap:wrap;gap:5px 10px;color:var(--muted);font-size:13px;}
+.results .directoryGuide {grid-column:2;grid-row:1;margin:0;border:0;padding:0;min-width:0;}
+.results .directoryGuide > summary {color:var(--ink);padding:2px 0;min-height:28px;font-size:14px;text-align:right;cursor:pointer;}
+.results .directoryGuide[open] {grid-column:1/-1;grid-row:2;}
+.directoryGuide[open] > div {max-width:800px;margin:0 auto 18px;}
+.aboutPage {max-width:52rem;}
+@media(max-width:720px){
+  .directoryHead {display:block;padding:13px 0 8px;}
+  .resultHead {padding:3px 0 7px;}
+}
+
+/* The same navigation tree is docked on the left or placed in the mobile drawer. */
+.tocLayout {display:grid;grid-template-columns:clamp(205px,23%,278px) minmax(0,1fr);column-gap:clamp(24px,3.8vw,54px);align-items:start;}
+#tocRail {position:sticky;top:0;display:flex;flex-direction:column;max-height:100vh;max-height:100dvh;padding:26px 16px 20px 0;border-right:1px solid var(--line);}
+#tocRail h2,.drawerHead h2 {margin:0;color:var(--ink);font:600 21px/1.4 var(--serif);}
+#tocRail h2 {margin:0 9px 13px;}
+.tocTree {display:block;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent;}
+.tocTree details,.tocTree summary {margin:0;border:0;list-style:none;}
+.tocTree summary::-webkit-details-marker {display:none;}
+.tocTree summary {display:flex;align-items:center;gap:9px;min-height:42px;padding:8px 7px;text-align:left;font-weight:650;color:var(--ink);cursor:pointer;}
+.tocTree summary::before {content:'';flex:none;width:6px;height:6px;border-right:1.5px solid;border-bottom:1.5px solid;transform:rotate(-45deg);}
+.tocTree details[open]>summary::before {transform:rotate(45deg);}
+.tocTree>details {border-top:1px solid var(--line);}
+.tocChildren {margin:0 0 8px 10px;}
+.tocSub {margin:1px 0 6px 20px;border-left:1px solid var(--line);}
+.tocTree a,.tocTree button {display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:8px;min-height:38px;padding:7px 10px;text-decoration:none;text-align:left;border-left:3px solid transparent;font-size:15px;line-height:1.5;color:var(--body);overflow-wrap:anywhere;}
+.tocSub a {min-height:32px;padding-block:5px;font-size:14px;}
+.tocTree a:hover,.tocTree button:hover,.tocTree summary:hover {background:var(--soft);}
+.tocTree [aria-current=page] {border-left-color:var(--accent);background:var(--tint);color:var(--ink);font-weight:650;}
+.tocTree :focus-visible {outline-offset:-2px;}
+.tocLayout>.directory {margin:0;max-width:none;min-width:0;}
+.directoryHead {align-items:baseline;}
+.directoryHead h1,.practiceHead h1 {overflow-wrap:anywhere;}
+.practiceHead {padding:24px 0 10px;}
+.practiceHead>div {display:flex;align-items:center;gap:14px;margin-top:6px;}
+#openToc {display:none;}
+#tocDrawer {position:fixed;inset:0 auto 0 0;width:min(86vw,340px);max-width:100%;height:100vh;height:100dvh;max-height:none;margin:0;padding:0;border:0;border-right:1px solid var(--line);background:var(--bg);color:var(--body);overflow:hidden;}
+#tocDrawer[open] {display:flex;flex-direction:column;animation:tocSlideIn .19s ease-out;}
+#tocDrawer::backdrop {background:var(--backdrop);}
+.drawerHead {display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid var(--line);}
+#closeToc {min-width:44px;min-height:44px;color:var(--ink);}
+#drawerSlot {display:flex;flex:1;min-height:0;}
+#drawerSlot>.tocTree {flex:1;padding:8px 14px calc(20px + env(safe-area-inset-bottom));touch-action:pan-y;}
+html.tocOpen {overflow:hidden;}
+@keyframes tocSlideIn {from {transform:translateX(-100%);} to {transform:translateX(0);}}
+@media(prefers-reduced-motion:reduce){#tocDrawer[open]{animation:none;}}
+@media(max-width:760px){
+  .tocLayout {display:block;}
+  #tocRail {display:none;}
+  .directoryHead {display:block;padding-top:16px;}
+  #openToc {position:relative;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:45px;margin-right:12px;padding:0 14px 0 2px;color:var(--ink);font-size:14px;}
+  #openToc::after {content:'';position:absolute;right:0;height:18px;border-right:1px solid var(--line);}
+  #openToc i {display:inline-block;position:relative;width:13px;height:10px;border-block:1.5px solid currentColor;}
+  #openToc i::after {position:absolute;content:'';left:0;right:0;top:3px;border-top:1.5px solid;}
+  #drawerSlot .tocTree a,#drawerSlot .tocTree button,#drawerSlot .tocTree summary {min-height:43px;}
+  .practiceHead {padding-top:16px;}
+}
+
+/* 一级入口下用页签切换索引或科目，目录仅承载当前页签的内容。 */
+.tabBar {display:flex;align-items:stretch;border-bottom:1px solid var(--line);}
+.sectionTabs {display:flex;align-items:stretch;gap:24px;}
+.sectionTabs a {display:grid;place-items:center;position:relative;min-width:3.5em;min-height:49px;padding:9px 8px 8px;text-decoration:none;color:var(--muted);font-weight:550;}
+.sectionTabs a:hover {color:var(--ink);background:var(--soft);}
+.sectionTabs a[aria-selected=true] {color:var(--ink);font-weight:700;}
+.sectionTabs a[aria-selected=true]::after {content:'';position:absolute;bottom:-1px;left:0;right:0;height:3px;background:var(--accent);}
+.sectionTabs a:focus-visible {outline-offset:-3px;}
+.strategyTabs .tabShort {display:none;}
+.tocTree .tocChildren a {font-size:14px;line-height:1.45;}
+.moduleRow,.skillRow {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:16px;}
+.skillRow {row-gap:2px;}
+.skillMethod {grid-column:1 / -1;color:var(--muted);font-size:.9rem;}
+.moduleRow small,.skillRow>small {color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.moduleRow:hover,.skillRow:hover {background:var(--soft);}
+.resultHead[hidden] {display:none;}
+.guideIntro {max-width:50rem;margin:0 0 21px;line-height:1.85;}
+.guideIntro p {margin:0 0 9px;}
+.practiceBank {container-type:inline-size;border:1px solid var(--input-line);background:var(--soft);padding:14px 18px 6px;}
+.results .practiceBank h2 {display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0;
+  padding-bottom:9px;border-bottom:1px solid var(--line);font-size:20px;}
+.practiceBank h2 small {font:400 13px/1.5 var(--sans);font-variant-numeric:tabular-nums;}
+.practiceBank nav {display:flex;}
+.practicePool {flex:1;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;
+  margin:5px 0;padding:4px 6px;color:var(--ink);text-decoration:none;}
+.practicePool + .practicePool {border-inline-start:1px solid var(--line);margin-inline-start:14px;padding-inline-start:18px;}
+.practicePool strong {font:600 18px/1.5 var(--serif);}
+.practicePool span {white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--body);font-size:14px;}
+.practicePool i {margin-inline-start:3px;color:var(--accent);font-style:normal;}
+.practicePool:hover,.practicePool:focus-visible {background:var(--tint);}
+.practiceSource {margin:0;padding:4px 0 6px;color:var(--muted);font-size:13px;}
+@container (max-width:390px){
+  .practiceBank nav {display:block;}
+  .practicePool {margin:0;padding-inline:2px;}
+  .practicePool + .practicePool {border-inline-start:0;border-top:1px solid var(--line);margin:0;padding-inline-start:2px;}
+}
+.results h2.practiceCategories {margin:clamp(28px,4vw,38px) 0 12px;}
+.guideIntro a[data-question] {white-space:nowrap;}
+.guideGroup {margin:26px 0 16px;}
+.guideGroup h2 {display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;margin:0 0 9px;font-size:23px;}
+.guideGroup h2 small {font:400 13px/1.5 var(--sans);color:var(--muted);}
+.guideRow {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 15px;padding:12px 3px;
+  border-top:1px solid var(--line);text-decoration:none;align-items:baseline;}
+.guideRow strong {font:600 19px/1.5 var(--serif);overflow-wrap:anywhere;}
+.guideRow small {text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.guideRow span {grid-column:1 / -1;font-size:.9rem;color:var(--muted);}
+.guideRow:hover,.guideRow:focus-visible {background:var(--soft);}
+.guideMore {font-size:.9rem;margin:14px 0 24px;}
+@media(max-width:480px){
+  .guideIntro {line-height:1.75;}
+  .guideRow {gap:4px 8px;}
+  .guideRow strong {font-size:18px;}
+  [aria-labelledby="tab-xingce"] .guideRow {display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 10px;}
+  [aria-labelledby="tab-xingce"] .guideRow span {flex-basis:100%;}
+}
+.practicePath {display:flex;align-items:center;gap:9px;margin-bottom:6px;font-size:.88rem;color:var(--muted);}
+.practicePath a {color:inherit;}
+.practiceProgress {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 14px;margin:10px 0 18px;padding-block:10px;border-block:1px solid var(--line);font-size:.9rem;}
+.practiceGroup {max-width:100%;overflow-wrap:anywhere;}
+.practicePaging {display:flex;flex:1 0 auto;align-items:center;justify-content:space-between;gap:12px;white-space:nowrap;}
+.practiceSteps {display:flex;align-items:center;gap:8px;}
+.practiceSteps .btn {font-size:inherit;line-height:1.45;}
+.practiceSteps button:disabled {opacity:.55;}
+.groupControl {display:inline-flex;align-items:center;gap:8px;}
+.groupControl select {max-width:min(60vw,300px);padding:4px 8px;}
+.questionFocus {font-size:.9rem;color:var(--muted);}
+.questionFocus b {color:var(--ink);margin-right:4px;}
+@media(max-width:760px){
+  .sectionTabs {gap:14px;}
+  .sectionTabs a {min-height:45px;}
+  .strategyTabs .sectionTabs {flex:1;min-width:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:0;}
+  .strategyTabs .sectionTabs a {min-width:0;padding-inline:1px;font-size:clamp(13px,3.7vw,16px);}
+  .strategyTabs .tabFull {display:none;}
+  .strategyTabs .tabShort {display:inline;}
+}
+
+/* Shared header and search field. */
+header .wrap {column-gap:clamp(12px,3vw,40px);}
+header .brand,header nav a,header .aboutLink,header .themeToggle {white-space:nowrap;}
+.searchIcon {position:relative;display:block;width:14px;height:14px;border:1.6px solid currentColor;border-radius:50%;margin:0 2px 2px 0;}
+.searchIcon::after {content:'';position:absolute;width:5.5px;height:1.6px;bottom:-2.4px;right:-3.8px;background:currentColor;transform:rotate(45deg);}
+@media(max-width:370px){
+  .sectionTabs {gap:5px;}
+  #openToc {margin-right:6px;padding-right:10px;}
+}
+html.readingEntry {overflow:hidden;}
+.strategyReader {width:100%;max-width:52rem;margin:0;padding-block:27px 72px;}
+.strategyReader h1 {font-size:clamp(28px,3.2vw,42px);margin:0 0 12px;}
+.strategyReader .practicePath {margin:0 0 14px;}
+.strategyLead {font:400 clamp(18px,1.7vw,22px)/1.75 var(--serif);color:var(--ink);margin:0 0 16px;}
+.strategyReader section>p {margin:9px 0 12px;}
+.strategyReader .pillrow {gap:5px 18px;font-size:.9rem;}
+.strategyRow {display:block;padding:16px 0;border-top:1px solid var(--line);text-decoration:none;}
+.strategyRow strong,.strategyRow span,.strategyRow .strategyScope {display:block;}
+.strategyRow strong {font:600 21px/1.5 var(--serif);}
+.strategyRow .strategyScope {margin-top:2px;color:var(--muted);font-size:.82rem;}
+.strategyRow span {margin-top:4px;color:var(--muted);}
+.strategyRow:hover strong {text-decoration:underline;}
+.strategySituations .situationGrid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0 6px;}
+.situationRow {display:flex;flex-direction:column;gap:6px;padding:12px 14px;border:1px solid var(--line);border-radius:4px;background:var(--soft);text-decoration:none;}
+.situationRow strong {font:600 17px/1.45 var(--serif);color:var(--ink);}
+.situationRow span {font-size:.88rem;line-height:1.6;color:var(--body);}
+.situationRow:hover {background:var(--tint);border-color:var(--gold);}
+.situationRow:hover strong {text-decoration:underline;}
+.strategyList {padding-left:1.5em;margin:10px 0 16px;}
+.strategyList li {margin:5px 0;padding-left:.18em;overflow-wrap:anywhere;}
+.strategyList li::marker {color:var(--accent);}
+.strategyList li strong {color:var(--ink);font-weight:600;}
+.strategyRule {border-left:3px solid var(--gold);padding:2px 15px;margin:16px 0;}
+.strategyRule p {margin:3px 0 5px;}
+.strategyTable {width:100%;margin:16px 0;border-collapse:collapse;font-size:.94rem;}
+.strategyTable th,.strategyTable td {padding:8px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);}
+.strategyTable th {background:var(--soft);color:var(--ink);}
+.strategyQuestions,.strategyLinks {margin:12px 0 4px;}
+.strategyQuestions>span,.strategyLinks>span {display:block;margin-bottom:3px;color:var(--muted);font-size:.82rem;}
+.strategyMobile {display:none;}
+@media(max-width:760px){
+  .strategyReader {padding-top:14px;}
+  .strategyMobile {display:block;border-bottom:1px solid var(--line);}
+  .strategyTable th,.strategyTable td {padding:7px;}
+  .strategySituations .situationGrid {grid-template-columns:1fr;}
+}
+#entryDialog {position:fixed;inset:var(--entry-top,67px) 0 0 0;margin:0 auto;padding:0;width:min(880px,calc(100% - 48px));max-width:none;height:calc(100vh - var(--entry-top,67px));height:calc(100dvh - var(--entry-top,67px));max-height:none;border:0;border-inline:1px solid var(--card-border);border-radius:0;background:var(--card-bg);color:var(--body);box-shadow:inset 1px 0 0 var(--card-inset),inset -1px 0 0 var(--card-inset),var(--card-shadow);overflow:hidden;}
+#entryDialog[open] {display:flex;flex-direction:column;animation:entryReveal .18s cubic-bezier(.22,1,.36,1);}
+@keyframes entryReveal {from {opacity:0;transform:translateY(10px);} to {opacity:1;transform:translateY(0);}}
+@media(prefers-reduced-motion:reduce){#entryDialog[open]{animation:none;}}
+#entryDialog::backdrop {top:var(--entry-top,67px);background:var(--backdrop);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.entryTop {flex:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px clamp(18px,3.8vw,44px);background:var(--card-head-bg);border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--card-inset);}
+#entryKind {display:inline-flex;align-items:center;padding:3px 10px;border:1px solid var(--card-badge-border);border-radius:3px;background:var(--tint);color:var(--accent);font-size:.8rem;font-weight:600;letter-spacing:.06em;white-space:nowrap;}
+#closeEntry {display:inline-grid;place-items:center;width:34px;height:34px;min-height:34px;padding:0;border:1px solid var(--line);border-radius:5px;background:var(--card-bg);color:var(--muted);transition:background-color .15s,border-color .15s,color .15s;}
+#closeEntry:hover {background:var(--soft);border-color:var(--gold);color:var(--accent);}
+#entryScroll {flex:1;overflow:auto;overscroll-behavior:contain;min-height:0;scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent;}
+#entryScroll::-webkit-scrollbar {width:7px;}
+#entryScroll::-webkit-scrollbar-track {background:transparent;}
+#entryScroll::-webkit-scrollbar-thumb {background:var(--scroll-thumb);border-radius:999px;border:2px solid transparent;background-clip:content-box;}
+#entryBody {width:100%;max-width:780px;margin:0 auto;padding:clamp(24px,3.2vw,40px) clamp(20px,4.2vw,48px) 56px;}
+#entryTitle {margin:0;font-size:clamp(28px,3vw,40px);line-height:1.3;letter-spacing:.02em;}
+#entryBody .kind {display:inline-flex;align-items:center;gap:7px;margin:10px 0 18px;padding:3px 11px;border:1px solid var(--line);border-radius:999px;background:var(--soft);color:var(--muted);font-size:.82rem;font-variant-numeric:tabular-nums;}
+#entryBody .kind::before {content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);}
+#entryBody .definition {margin:6px 0 22px;padding:18px 22px;background:var(--card-def-bg);border:1px solid var(--card-badge-border);border-left:4px solid var(--accent);border-radius:6px;font:400 clamp(18px,2vw,23px)/1.75 var(--serif);color:var(--ink);box-shadow:inset 0 1px 0 var(--card-inset);}
+#entryBody .disclaimer,#entryBody blockquote {margin:14px 0;padding:10px 15px;background:var(--soft);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;}
+#entryBody section {position:relative;margin-top:26px;padding:22px 0 4px;border-top:1px solid var(--line);}
+#entryBody section::before {content:'';position:absolute;top:-1px;left:0;width:32px;height:2px;background:var(--gold);}
+#entryBody section h2 {font-size:20px;letter-spacing:.03em;margin:0 0 12px;}
+#entryBody details {border:1px solid var(--line);border-radius:6px;padding:2px 14px;margin:10px 0;background:var(--soft);}
+#entryBody details[open] {background:var(--card-bg);border-color:var(--input-line);padding-bottom:12px;}
+#entryBody details>summary {padding:8px 0;font-weight:550;}
+#entryBody .questionRow {padding:0 8px;border-bottom:1px solid var(--line);transition:background-color .15s;}
+#entryBody .questionRow:hover {background:var(--soft);}
+#entryBody .questionToggle small {flex:none;padding:2px 8px;border:1px solid var(--line);border-radius:3px;background:var(--soft);color:var(--muted);font-size:.78rem;}
+#entryBody .questionRow:has(> .questionToggle[aria-expanded="true"]) {margin:10px -8px;padding:4px 16px 14px;border:1px solid var(--card-badge-border);border-radius:8px;background:var(--card-sub-bg);}
+#entryBody .questionRow:has(> .questionToggle[aria-expanded="true"]):hover {background:var(--card-sub-bg);}
+#entryBody .choice {border-radius:5px;background:var(--card-bg);transition:background-color .15s,border-color .15s;}
+#entryBody .choice:hover {background:var(--soft);border-color:var(--input-line);}
+#entryBody .answerbox,#entryBody .callout,#entryBody .calculation {border:1px solid var(--line);border-radius:6px;}
+#entryBody .callout {border-left:3px solid var(--gold);}
+#entryBody .pillrow {gap:8px 10px;margin-top:10px;}
+#entryBody .pillrow a {display:inline-flex;align-items:center;padding:4px 11px;border:1px solid var(--line);border-radius:5px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:.88rem;transition:background-color .15s,border-color .15s,color .15s;}
+#entryBody .pillrow a:hover {background:var(--tint);border-color:var(--gold);color:var(--accent);}
+#entryBody .quiet {display:inline-flex;align-items:center;margin-top:12px;padding:5px 12px;border:1px dashed var(--input-line);border-radius:5px;text-decoration:none;font-size:.88rem;color:var(--muted);transition:background-color .15s,border-color .15s,color .15s;}
+#entryBody .quiet:hover {background:var(--soft);border-color:var(--gold);color:var(--accent);}
+@media(max-width:760px){
+  #entryDialog {width:100%;border-inline:0;}
+  .entryTop {padding:8px 14px;gap:8px;}
+  #entryBody {padding:18px 16px calc(40px + env(safe-area-inset-bottom));}
+  #entryBody .definition {padding:14px 16px;}
+  #entryBody .questionRow:has(> .questionToggle[aria-expanded="true"]) {margin:8px -4px;padding:4px 12px 12px;}
+}
+
+/* 参考原稿和资料检索沿用策略正文、目录和移动端抽屉。 */
+.referenceReader,.libraryReader {min-width:0;}
+.referenceReader h1 {text-wrap:balance;}
+.referenceReader .practicePath,.libraryReader .practicePath {flex-wrap:wrap;gap:3px 9px;}
+.referenceActions {display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 20px;margin-bottom:22px;padding-bottom:13px;border-bottom:1px solid var(--line);}
+.referenceActions a,.referenceActions button {font-size:.87rem;color:var(--muted);line-height:1.65;}
+.referenceActions .back {padding:0;}
+.referenceReader a:hover,.libraryReader a:hover,.referenceActions button:hover {color:var(--accent);}
+.referenceProse {max-width:44rem;line-height:1.85;}
+.referenceProse h2 {margin:30px 0 10px;font-size:clamp(21px,2vw,26px);line-height:1.45;text-wrap:pretty;}
+.referenceProse>:first-child {margin-top:0;}
+.sectionNumber {margin-right:.6em;color:var(--accent);font-variant-numeric:tabular-nums;}
+.referenceProse p {margin:9px 0 14px;}
+.referenceProse ul,.referenceProse ol {padding-left:1.5em;margin:9px 0 18px;}
+.referenceProse li {padding-left:.18em;margin:5px 0;overflow-wrap:anywhere;}
+.referenceProse li::marker {color:var(--accent);}
+.referenceProse li strong {color:var(--ink);font-weight:600;}
+.referenceNote {border-left:3px solid var(--gold);padding:5px 14px;margin:18px 0;white-space:pre-line;}
+.referenceTable {max-width:100%;overflow:auto;margin:16px 0 24px;}
+.referenceTable table {margin:0;}
+.referenceTable :is(td,th) {min-width:6em;white-space:pre-line;overflow-wrap:anywhere;}
+.referencePaging {display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 20px;padding-top:18px;margin:32px 0 0;border-top:1px solid var(--line);font-size:.9rem;}
+.referenceContents {border-bottom:1px solid var(--line);}
+.referenceContents a {display:block;width:fit-content;padding:11px 0;font:600 19px/1.5 var(--serif);}
+
+.libraryForm {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 16px;margin:18px 0 0;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.libraryForm label {display:grid;gap:3px;color:var(--muted);font-size:.86rem;}
+.libraryForm .libraryQuery {grid-column:1/-1;}
+.libraryForm :is(input[type=search],select) {min-width:0;width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--body);font:inherit;font-size:1rem;}
+.libraryForm .libraryCheckbox {display:flex;align-items:center;align-self:end;min-height:43px;gap:6px;}
+.libraryCheckbox input {accent-color:var(--ink);}
+.libraryRow {padding:14px 0;border-top:1px solid var(--line);}
+.libraryRow>small {display:block;}
+.libraryRow>a,.libraryRow>details>summary {font:600 20px/1.5 var(--serif);color:var(--ink);}
+.libraryRow>details {border:0;padding:0;}
+.libraryRow .originalText {white-space:pre-wrap;}
+.libraryRow details details {padding-left:12px;border-left:2px solid var(--line);}
+.libraryRelated {display:block;width:fit-content;}
+.libraryExcerpt {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:3px 0 0;color:var(--muted);font-size:.9rem;}
+.libraryRow details[open]+.libraryExcerpt,#libraryMore[hidden] {display:none;}
+@media(max-width:760px){
+  .referenceActions {margin-bottom:18px;}
+  .referenceActions a,.referenceActions button,.referencePaging a {display:inline-flex;align-items:center;min-height:40px;}
+  .referenceProse h2 {margin-top:24px;}
+  .libraryForm {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .libraryForm label:has(select[name=paper]) {grid-column:1/-1;}
+  .referenceTable :is(td,th) {min-width:5.5em;}
+}
+
+.searchPage {max-width:58rem;margin:0 auto;padding:1.5rem 0 3rem;}
+.searchPage h1 {margin:.5rem 0;}
+
+.globalSearch {display:flex;align-items:center;height:32px;min-width:8rem;max-width:16rem;flex:1;margin-inline-start:auto;padding:0 4px 0 13px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);transition:border-color .15s,background-color .15s,box-shadow .15s;}
+.globalSearch:focus-within {outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgb(239 197 98 / 28%);}
+.globalSearch input {flex:1;width:100%;min-width:0;height:100%;padding:0 4px 0 0;border:0;outline:0;background:transparent;font-size:14px;line-height:1;}
+.globalSearch input::placeholder {color:var(--muted);}
+.globalSearch button {display:grid;place-items:center;width:26px;height:26px;min-width:26px;min-height:26px;border-radius:50%;color:var(--muted);transition:color .15s,background-color .15s;}
+.globalSearch button:hover {color:var(--accent);background:var(--soft);}
+header .globalSearch {border-color:rgb(255 244 224 / 32%);background:rgb(0 0 0 / 18%);color:var(--header-ink);}
+header .globalSearch:focus-within {border-color:var(--header-active);background:rgb(0 0 0 / 28%);}
+header .globalSearch input::placeholder {color:var(--header-muted);opacity:.85;}
+header .globalSearch button {color:var(--header-muted);}
+header .globalSearch button:hover {color:var(--header-active);background:rgb(255 244 224 / 12%);}
+header .globalSearch + .headerTools {margin-inline-start:0;}
+.sourcePage {max-width:55rem;margin:0 auto;padding:1.5rem 0 3rem;}
+.sourcePage h1 {overflow-wrap:anywhere;line-height:1.35;}
+.sourcePage h2 {margin:1.6rem 0 .5rem;}
+.sourceGroup {margin:18px 0 8px;}
+.sourceGroup h3 {margin:0 0 8px;font-size:1.02rem;color:var(--accent);}
+.sourceItemTitle {display:block;font:600 1.05rem/1.5 var(--serif);margin:.1rem 0;}
+.sourceList {list-style:none;padding:0;margin:0;}
+.sourceList li {border-top:1px solid var(--line);padding:.8rem 0;}
+.sourceList h3,.sourceList p {margin:.15rem 0;}
+.sourceList small {display:block;color:var(--muted);}
+.sourceChapters li {padding:.35rem 0;}
+#studySplash {
+  position:fixed;inset:0;z-index:10;display:grid;align-content:center;justify-items:center;
+  padding:24px;background:var(--bg);color:var(--ink);text-align:center;
+}
+.launchWordmark {font-size:clamp(48px,8vw,76px);line-height:1.3;letter-spacing:.06em;}
+.launchWordmark::after {content:"";display:block;width:2rem;height:2px;margin:16px auto 0;background:var(--gold);}
+#launchStatus {margin:14px 0 0;color:var(--muted);font-size:.94rem;}
+#launchRetry {margin-top:16px;}
+#launchRetry[hidden] {display:none;}
+html[data-launching] {overflow:hidden;}
+html[data-launching] #studyShell {visibility:hidden;}
+html[data-launching] dialog::backdrop {background:transparent;}
+.launchWordmark, header .brand, :is(#content,#entryBody,#tocDrawer,#dialog) :is(h1,h2,h3) {
+  font-family:"Huiwen ZhengKai","Kaiti SC","KaiTi",var(--serif);
+  font-weight:400;
+}
+#openGlobalSearch, #closeGlobalSearch, #mobileTools {display:none;}
+@media(max-width:880px){
+  header .wrap {min-height:52px;padding-inline:clamp(8px,2.8vw,22px);gap:clamp(4px,1.6vw,14px);}
+  header .brand {font-size:clamp(21px,5.7vw,27px);letter-spacing:0;}
+  header nav {flex:1;align-self:stretch;justify-content:center;gap:clamp(2px,2vw,20px);}
+  header nav a {display:grid;place-items:center;min-width:44px;padding:3px 0 0;font-size:clamp(15px,3.8vw,17px);}
+  header nav span {display:none;}
+  header .headerTools {display:none;}
+  #openGlobalSearch {display:grid;width:40px;height:40px;}
+  header .globalSearch {display:none;max-width:none;height:40px;}
+  header .globalSearch input {font-size:16px;}
+  header .globalSearch button {width:36px;height:36px;}
+  header .wrap:has(#openGlobalSearch[aria-expanded="true"]) > :not(.globalSearch) {display:none;}
+  header .wrap:has(#openGlobalSearch[aria-expanded="true"]) .globalSearch {display:flex;}
+  #closeGlobalSearch {display:grid;font:24px/1 var(--sans);}
+  #mobileTools {display:flex;justify-content:flex-end;border-top:1px solid var(--line);padding-block:8px;}
+  #mobileTools .headerIconBtn {display:grid;place-items:center;min-width:44px;min-height:44px;color:var(--muted);}
+}
+
+.wordingGuide .practicePath {flex-wrap:wrap;}
+.wordingGuide h2 {margin:24px 0 10px;}
+.wordingGuide h2 small {font:normal .85rem var(--sans);color:var(--muted);}
+.wordingPoints {margin:0;}
+.wordingPoints > div {padding:6px 0 10px;}
+.wordingPoints dt {font-weight:650;}
+.wordingPoints dd,.wordingExample p {margin:4px 0;line-height:1.8;}
+.wordingExample {margin:0;padding:0 0 12px;scroll-margin-top:1rem;}
+.wordingExample h3 {font:600 1.12rem/1.5 var(--serif);margin:0;}
+.wordingExample .stem {margin:10px 0 6px;color:var(--ink);}
+.wordingExample .choice:disabled {color:var(--ink);opacity:1;cursor:default;}
+.wordingExample .choice:enabled:hover {border-color:var(--accent);}
+.wordingNotes > summary {font:600 1.12rem/1.6 var(--serif);}
+.wordingPoints .wordingTerms,.wordingPoints .wordingExamples,.wordingExample .wordingTerms {font-size:.9rem;margin:4px 0;}
+.wordingSources,.wordingPapers {font-size:.9rem;color:var(--muted);}
+.wordingPapers {padding-left:1.3em;}
+.wordingGuide table {width:100%;table-layout:fixed;border-collapse:collapse;text-align:left;}
+.wordingGuide th,.wordingGuide td {padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere;}
+.wordingGuide th:first-child {width:3.4em;}
+.wordingGuide tbody strong {color:var(--accent);}
 </style>
+<style id="titleShards">@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/6aaa3be6455df6d2d2031dd6.woff2") format("woff2");unicode-range:U+21-2F,U+37-38,U+3A-B6,U+B8-3015}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/5f0bec9a5d41dce017b24c64.woff2") format("woff2");unicode-range:U+4E00-4E0D,U+4E0F-4E12,U+4E14-4E19,U+4E1B-4E33,U+4E35-4E3A,U+4E3C-4E48,U+4E4A-4EA6,U+4EA8-4F19,U+4F1B-4F55}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/c3afb4d52990c28e3f273526.woff2") format("woff2");unicode-range:U+4F59-4F5B,U+4F5D-5164,U+5166-5167,U+5169-516B,U+516D-5170,U+5172-51FA,U+51FC-5205,U+5207-524D}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/ff499180a85e4a16cc9d03cf.woff2") format("woff2");unicode-range:U+5250-5315,U+5317-542A,U+542C-543B}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/69cf0dd73e024f4b624318ca.woff2") format("woff2");unicode-range:U+543E-5739,U+573B-5882,U+5884-5903,U+5905-5906,U+5908-593A}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/e871a6f3917bc8fae380d14d.woff2") format("woff2");unicode-range:U+5947-5D07}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/691dc86d8d70cb222e0ddd03.woff2") format("woff2");unicode-range:U+5D1B-5E73,U+5E75-5F54,U+5F56-6000,U+6002-6063}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/924deedb0adabea2298442a0.woff2") format("woff2");unicode-range:U+6068-627F,U+6281-6308,U+630A-63A5}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/ab37aa5726ed8be4209b47fe.woff2") format("woff2");unicode-range:U+63A7-653E,U+6540-6586,U+6588-6598,U+659A-65F5,U+65F7-672B}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/1dd64aad2445229fef786e16.woff2") format("woff2");unicode-range:U+672C-680E,U+6810-6C10,U+6C12-6C38}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/8a11b2791c45c7b613b2cfe3.woff2") format("woff2");unicode-range:U+6C3E-6CBA,U+6CBC-6D4A,U+6D4C-6D4D,U+6D4F-706F}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/fb76c686e8cca1673b77825c.woff2") format("woff2");unicode-range:U+7070-70B8,U+70BA-70EC,U+70EE-7405,U+7407-751E,U+7520-7532,U+7534-7564,U+7566-76CA}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/8016d9e10a6a42a1d9b13ab1.woff2") format("woff2");unicode-range:U+76CF-76ED,U+76EF-771E,U+7720-793D,U+793F-7A80,U+7A82-7B53,U+7B55-7B55,U+7B57-7B97}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/202c002b0a9adb706d368227.woff2") format("woff2");unicode-range:U+7BA1-7C7A,U+7C7C-7ECE,U+7ED0-8002,U+8004-80C1}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/eb7a6c7208064dffd9ad7908.woff2") format("woff2");unicode-range:U+80CC-80FC,U+80FE-86F0}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/4f5613f7a365638896dd2964.woff2") format("woff2");unicode-range:U+8700-884B,U+884D-8BB1,U+8BB3-8BB9,U+8BBB-8D2B}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/ec4cec3e2452bdba6cad2b50.woff2") format("woff2");unicode-range:U+8D2C-8D43,U+8D45-8FDA,U+8FDC-906E}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/8276373582d2b824c74f6a27.woff2") format("woff2");unicode-range:U+9074-90E7,U+90E9-96C5}
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/fonts/f1732343059de1b4a446701d.woff2") format("woff2");unicode-range:U+96C6-9878,U+987A-9897,U+9899-FF5C}</style>
+<script>
+if(location.protocol==='file:'){
+  document.getElementById('titleShards').media='not all';
+  const link=document.createElement('link');
+  link.rel='stylesheet';link.href='assets/title-font.css';document.head.append(link);
+}
+</script>
+<style>@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:block;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("data:font/woff2;base64,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") format("woff2");unicode-range:U+20,U+30,U+31,U+32,U+33,U+34,U+35,U+36,U+39,U+B7,U+4E0E,U+4E13,U+4E1A,U+4E34,U+4E3B,U+4E49,U+4EA7,U+4F1A,U+4F5C,U+5165,U+5168,U+516C,U+5171,U+51FB,U+5206,U+5316,U+542B,U+573A,U+5883,U+5904,U+5907,U+5E74,U+5F55,U+6001,U+6280,U+6309,U+653F,U+6587,U+6599,U+65F6,U+680F,U+6C11,U+6CBB,U+6D4B,U+6D4E,U+70B9,U+70ED,U+7406,U+751F,U+7533,U+7565,U+76EE,U+771F,U+793E,U+7A81,U+7B54,U+7B56,U+7C7B,U+7ECF,U+8003,U+80FD,U+884C,U+8BB2,U+8BBA,U+8D44,U+8FDB,U+90E8,U+9879,U+9898}</style>
 </head>
 <body>
+<div id="studySplash">
+  <div class="launchWordmark">考公突击</div>
+  <p id="launchStatus" role="status">正在准备学习目录…</p>
+  <button type="button" id="launchRetry" class="btn" hidden>重新读取</button>
+</div>
+<noscript><style>#studySplash{display:none}</style><p class="wrap">请启用 JavaScript 以使用学习目录和题卡。</p></noscript>
+<div id="studyShell" inert>
 <a class="skip" href="#content">跳到正文</a>
 <header><div class="wrap"><span class="brand">考公突击</span>
 <nav aria-label="学习入口">
@@ -43,22 +608,7 @@
 <div class="headerTools"><button type="button" class="themeToggle headerIconBtn" data-theme-toggle aria-pressed="false" aria-label="切换为玄墨深色模式" title="切换为玄墨深色模式"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.4A8.2 8.2 0 0 1 9.6 3.8a8.2 8.2 0 1 0 10.6 10.6z"/></svg></button><a id="nAbout" class="aboutLink headerIconBtn" href="#about" data-route="about" aria-label="关于与原始资料" title="关于与原始资料"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r=".7" fill="currentColor" stroke="none"/></svg></a></div>
 </div></header>
 <div class="wrap" id="pageNotice" hidden><span role="status"></span> <button class="btn" type="button" hidden>重新读取</button></div>
-<main tabindex="-1" id="content" class="wrap">
-  <section class="results directory" id="startupDirectory">
-    <div class="directoryHead"><h1>知识索引</h1></div>
-    <nav id="startupLinks" aria-label="知识索引">
-      <a class="guideRow" href="#index/class/facts"><strong>事实与事件</strong></a>
-      <a class="guideRow" href="#index/class/concepts"><strong>概念与词义</strong></a>
-      <a class="guideRow" href="#index/class/principles"><strong>原理与机制</strong></a>
-      <a class="guideRow" href="#index/class/rules"><strong>制度与规则</strong></a>
-      <a class="guideRow" href="#index/class/methods"><strong>方法与技能</strong></a>
-      <a class="guideRow" href="#index/class/arguments"><strong>观点与论证</strong></a>
-      <a class="guideRow" href="#index/topic"><strong>主题</strong></a>
-      <a class="guideRow" href="#index/event"><strong>时政</strong></a>
-      <a class="guideRow" href="#index/class/all"><strong>全部知识点</strong></a>
-    </nav>
-  </section>
-</main>
+<main tabindex="-1" id="content" class="wrap"></main>
 <footer id="mobileTools" class="wrap" aria-label="站点工具"></footer>
 <dialog id="tocDrawer" aria-labelledby="drawerTitle">
   <div class="drawerHead"><h2 id="drawerTitle">目录</h2><button id="closeToc" aria-label="关闭目录">关闭</button></div>
@@ -70,19 +620,29 @@
 </dialog>
 <dialog class="dialog" id="dialog"><div class="dialogInside"><div class="dialogHead"><h2 id="dialogTitle"></h2><button class="outline" id="closeDlg">关闭</button></div><label class="searchbox"><i class="lens" aria-hidden="true"></i><input type="search" id="pickSearch" aria-label="搜索关联对象"></label><div class="introRow"><label for="role" class="note">关联方式</label><select id="role" class="relation"><option>直接考查</option><option>解题依据</option></select><span class="note">改动保存在此浏览器</span></div><div class="pickList" id="picks"></div></div></dialog><div role="status" class="toast" id="toast" hidden></div>
 
+</div>
 
+<script type="application/json" id="moduleHomes">{"homes":{"index/class":{"key":"index/class","state":{"route":"index/class"},"html":"\u003cdiv class=\"tabBar \">\u003cbutton type=\"button\" id=\"openToc\" aria-controls=\"tocDrawer\" aria-expanded=\"false\" aria-haspopup=\"dialog\">\u003ci aria-hidden=\"true\">\u003c/i>目录\u003c/button>\u003cdiv class=\"sectionTabs\" role=\"tablist\" aria-label=\"知识索引方式\">\u003ca id=\"tab-class\" href=\"#index/class\" role=\"tab\" data-tab=\"index/class\" aria-controls=\"studyPanel\" aria-selected=\"true\" tabindex=\"0\">分类\u003c/a>\u003ca id=\"tab-topic\" href=\"#index/topic\" role=\"tab\" data-tab=\"index/topic\" aria-controls=\"studyPanel\" aria-selected=\"false\" tabindex=\"-1\">主题\u003c/a>\u003ca id=\"tab-event\" href=\"#index/event\" role=\"tab\" data-tab=\"index/event\" aria-controls=\"studyPanel\" aria-selected=\"false\" tabindex=\"-1\">时政\u003c/a>\u003c/div>\u003c/div>\u003cdiv class=\"tocLayout\" role=\"tabpanel\" id=\"studyPanel\" aria-labelledby=\"tab-class\">\u003caside id=\"tocRail\" aria-label=\"分类目录\">\u003ch2>分类目录\u003c/h2>\u003cnav class=\"tocTree\" id=\"tocTree\" aria-label=\"分类目录\">\u003ca data-toc-link href=\"#index/class\" aria-current=\"page\">分类首页\u003c/a>\u003ca data-toc-link href=\"#index/class/all\">全部知识点\u003c/a>\u003ca data-toc-link href=\"#index/class/facts\">事实与事件\u003c/a>\u003ca data-toc-link href=\"#index/class/concepts\">概念与词义\u003c/a>\u003ca data-toc-link href=\"#index/class/principles\">原理与机制\u003c/a>\u003ca data-toc-link href=\"#index/class/rules\">制度与规则\u003c/a>\u003ca data-toc-link href=\"#index/class/methods\">方法与技能\u003c/a>\u003ca data-toc-link href=\"#index/class/arguments\">观点与论证\u003c/a>\u003c/nav>\u003c/aside>\u003csection class=\"results directory\">\u003cdiv class=\"directoryHead\">\u003ch1 tabindex=\"-1\">分类\u003c/h1>\u003c/div>\u003cdiv class=\"resultHead\" hidden>\u003cdiv class=\"resultMeta\">\u003cspan id=\"resultCount\" role=\"status\">\u003c/span>\u003c/div>\u003c/div>\u003cdiv id=\"rows\">\u003cdiv class=\"guideIntro\">\u003cp>全库2,650个词条按知识性质分为六类。时间、地点与会议出处归在\u003cstrong>事实与事件\u003c/strong>，近义词与术语辨析归在\u003cstrong>概念与词义\u003c/strong>，公式与成立条件归在\u003cstrong>原理与机制\u003c/strong>，主体职权与适用程序归在\u003cstrong>制度与规则\u003c/strong>，单题用到的特定算法或调研做法归在\u003cstrong>方法与技能\u003c/strong>，材料主张与论证范围归在\u003cstrong>观点与论证\u003c/strong>。\u003c/p>\u003cp>收录范围包括真题词条与讲义补充词条；按题型成组刷题在顶部的\u003ca href=\"#skills/xingce\" data-route=\"skills/xingce\">技能训练\u003c/a>。\u003c/p>\u003c/div>\u003ca class=\"guideRow\" data-route=\"index/class/facts\" href=\"#index/class/facts\">\u003cstrong>事实与事件\u003c/strong>\u003csmall>464 条\u003c/small>\u003cspan>某件事发生在何时何地，对应哪次会议、哪份文件或哪项任务？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"index/class/concepts\" href=\"#index/class/concepts\">\u003cstrong>概念与词义\u003c/strong>\u003csmall>655 条\u003c/small>\u003cspan>这个词语或政策术语准确指什么，换一个近义词会改变哪一层含义？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"index/class/principles\" href=\"#index/class/principles\">\u003cstrong>原理与机制\u003c/strong>\u003csmall>470 条\u003c/small>\u003cspan>在什么前提下，这一数学、逻辑或社会运行关系才成立？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"index/class/rules\" href=\"#index/class/rules\">\u003cstrong>制度与规则\u003c/strong>\u003csmall>637 条\u003c/small>\u003cspan>哪类主体拥有什么职权，适用哪些程序、条件或例外？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"index/class/methods\" href=\"#index/class/methods\">\u003cstrong>方法与技能\u003c/strong>\u003csmall>42 条\u003c/small>\u003cspan>遇到特定决策准则、单位换算或调研规范时，按什么步骤处理？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"index/class/arguments\" href=\"#index/class/arguments\">\u003cstrong>观点与论证\u003c/strong>\u003csmall>382 条\u003c/small>\u003cspan>材料里的核心主张是什么，需要哪些依据，结论能推多远？\u003c/span>\u003c/a>\u003cp class=\"guideMore\">\u003ca href=\"#index/class/all\" data-route=\"index/class/all\">按考查热度浏览全部2,650个词条\u003c/a>\u003c/p>\u003c/div>\u003c/section>\u003c/div>"},"skills/xingce":{"key":"skills/xingce","state":{"route":"skills/xingce","pick":""},"html":"\u003cdiv class=\"tabBar \">\u003cbutton type=\"button\" id=\"openToc\" aria-controls=\"tocDrawer\" aria-expanded=\"false\" aria-haspopup=\"dialog\">\u003ci aria-hidden=\"true\">\u003c/i>目录\u003c/button>\u003cdiv class=\"sectionTabs\" role=\"tablist\" aria-label=\"训练科目\">\u003ca id=\"tab-xingce\" href=\"#skills/xingce\" role=\"tab\" data-tab=\"skills/xingce\" aria-controls=\"studyPanel\" aria-selected=\"true\" tabindex=\"0\">行测\u003c/a>\u003ca id=\"tab-shenlun\" href=\"#skills/shenlun\" role=\"tab\" data-tab=\"skills/shenlun\" aria-controls=\"studyPanel\" aria-selected=\"false\" tabindex=\"-1\">申论\u003c/a>\u003c/div>\u003c/div>\u003cdiv class=\"tocLayout\" role=\"tabpanel\" id=\"studyPanel\" aria-labelledby=\"tab-xingce\">\u003caside id=\"tocRail\" aria-label=\"行测技能目录\">\u003ch2>行测技能目录\u003c/h2>\u003cnav class=\"tocTree\" id=\"tocTree\" aria-label=\"行测技能目录\">\u003ca data-toc-link href=\"#skills/xingce\" aria-current=\"page\">行测技能首页\u003c/a>\u003cdetails data-branch=\"module-政治理论\">\u003csummary>政治理论\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E6%94%BF%E6%B2%BB%E7%90%86%E8%AE%BA\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/theory\">理论原理与材料对应\u003c/a>\u003ca data-toc-link href=\"#practice/policy\">政策目标与具体举措\u003c/a>\u003ca data-toc-link href=\"#practice/institutions\">制度、文件与规范表述\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"wording\">\u003csummary>时政措辞辨析\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#practice/wording\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/wording/conditions\">必须、可以与例外条件\u003c/a>\u003ca data-toc-link href=\"#practice/wording/degree\">强度、进度与结果\u003c/a>\u003ca data-toc-link href=\"#practice/wording/roles\">首要任务、根本保证与具体分工\u003c/a>\u003ca data-toc-link href=\"#practice/wording/scope\">主体、对象与适用范围\u003c/a>\u003ca data-toc-link href=\"#practice/wording/authority\">宪法、党章与制度权限\u003c/a>\u003ca data-toc-link href=\"#practice/wording/direction\">方向、分类与历史阶段\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"module-常识判断\">\u003csummary>常识判断\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E5%B8%B8%E8%AF%86%E5%88%A4%E6%96%AD\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/law\">法律规则与案例\u003c/a>\u003ca data-toc-link href=\"#practice/science\">科技、地理与生活现象\u003c/a>\u003ca data-toc-link href=\"#practice/public-affairs\">经济、政策与公共管理\u003c/a>\u003ca data-toc-link href=\"#practice/history-culture\">历史人文与国情\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"module-言语理解与表达\">\u003csummary>言语理解与表达\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/s-bc177199c1351631\">根据语境辨析词语\u003c/a>\u003ca data-toc-link href=\"#practice/s-gist\">主旨与作者意图\u003c/a>\u003ca data-toc-link href=\"#practice/s-c5eac332ba86912d\">结合搭配对象辨析用词\u003c/a>\u003ca data-toc-link href=\"#practice/s-ef0f414c890a2427\">核对原文与选项\u003c/a>\u003ca data-toc-link href=\"#practice/s-4eebda7bdff18647\">补全语句衔接\u003c/a>\u003ca data-toc-link href=\"#practice/s-871196fcda246b8d\">语句排序与插入\u003c/a>\u003ca data-toc-link href=\"#practice/s-94e5b1e84b4945ab\">推断下文\u003c/a>\u003ca data-toc-link href=\"#practice/s-0a0bc5508fefda64\">拟定文段标题\u003c/a>\u003ca data-toc-link href=\"#practice/s-8713d7d1007a8167\">词句含义与指代\u003c/a>\u003ca data-toc-link href=\"#practice/s-84ff0f0fbbe378d8\">结合语境辨析成语\u003c/a>\u003ca data-toc-link href=\"#practice/s-b2f959b1b4484115\">辨认材料支持的观点\u003c/a>\u003ca data-toc-link href=\"#practice/s-300f89e88263b685\">通过转折定位文段重心\u003c/a>\u003ca data-toc-link href=\"#practice/s-4159fb5ba3bc2963\">运用文段给出的标准判断实例\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"module-数量关系\">\u003csummary>数量关系\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E6%95%B0%E9%87%8F%E5%85%B3%E7%B3%BB\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/s-ac5c371e800baa75\">几何构造与度量\u003c/a>\u003ca data-toc-link href=\"#practice/s-d968fce424f6218d\">等量关系列方程\u003c/a>\u003ca data-toc-link href=\"#practice/s-c0f6c7e3ae9d902e\">排列组合与分类计数\u003c/a>\u003ca data-toc-link href=\"#practice/s-bfe8437fe159274c\">拆分与改写数列\u003c/a>\u003ca data-toc-link href=\"#practice/s-4d945e4b584e20e6\">工程量与效率\u003c/a>\u003ca data-toc-link href=\"#practice/s-a678755b344c536e\">行程、相遇与追及\u003c/a>\u003ca data-toc-link href=\"#practice/s-fa618aa0e5554dde\">事件概率与几何概率\u003c/a>\u003ca data-toc-link href=\"#practice/s-36722f3b0a111400\">周期与余数\u003c/a>\u003ca data-toc-link href=\"#practice/s-36bcdccc44445c07\">用容斥计算重叠人数\u003c/a>\u003ca data-toc-link href=\"#practice/s-27070cd6f8f1808e\">约束条件下求最值\u003c/a>\u003ca data-toc-link href=\"#practice/s-55b69f4a0862f7f1\">成本、售价与收入\u003c/a>\u003ca data-toc-link href=\"#practice/s-98ca154ecf4968d7\">利用整数条件求解不定方程\u003c/a>\u003ca data-toc-link href=\"#practice/s-7ee6e0e28c7c40e3\">辨认数列递推或周期规律\u003c/a>\u003ca data-toc-link href=\"#practice/s-261f4b85ee542fe2\">代入选项验算\u003c/a>\u003ca data-toc-link href=\"#practice/s-4c82ef55d2b649c7\">数列作差与作商\u003c/a>\u003ca data-toc-link href=\"#practice/s-5864586ebd669b08\">等差数列求项与求和\u003c/a>\u003ca data-toc-link href=\"#practice/s-7c91e017f98bac24\">用比例赋值简化计算\u003c/a>\u003ca data-toc-link href=\"#practice/s-f6792163b580976b\">按溶质量守恒计算混合与稀释\u003c/a>\u003ca data-toc-link href=\"#practice/s-b0dec29a0ef842cb\">按边权选择最小生成树的边\u003c/a>\u003ca data-toc-link href=\"#practice/s-ff03c13adcbe7233\">端点与间隔计数\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"module-判断推理\">\u003csummary>判断推理\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E5%88%A4%E6%96%AD%E6%8E%A8%E7%90%86\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/s-conditions\">按题内定义核对案例条件\u003c/a>\u003ca data-toc-link href=\"#practice/s-d45531f0ca63ae30\">类比关系与词项顺序\u003c/a>\u003ca data-toc-link href=\"#practice/s-aa16640dd943508a\">多条件对应与排序\u003c/a>\u003ca data-toc-link href=\"#practice/s-c96dc3b8ef59659c\">图形元素计数\u003c/a>\u003ca data-toc-link href=\"#practice/s-tiles\">按边界重组平面碎片\u003c/a>\u003ca data-toc-link href=\"#practice/s-2ee7513507dfe397\">用证据加强结论\u003c/a>\u003ca data-toc-link href=\"#practice/s-afb05982fcc9a31c\">判断展开图的邻面、图案和公共边\u003c/a>\u003ca data-toc-link href=\"#practice/s-449334f5aeb5ea84\">图形平移、旋转与翻折\u003c/a>\u003ca data-toc-link href=\"#practice/s-b675a81beafb818e\">立体视图与截面\u003c/a>\u003ca data-toc-link href=\"#practice/s-449c824eeb0b7f3d\">对称与形状属性\u003c/a>\u003ca data-toc-link href=\"#practice/s-bd23484a6c3aa41a\">检验论证成立的条件\u003c/a>\u003ca data-toc-link href=\"#practice/s-8e029448a5228c68\">条件推理与结论范围\u003c/a>\u003ca data-toc-link href=\"#practice/s-26718cf11a50ed78\">构词与词义关系\u003c/a>\u003ca data-toc-link href=\"#practice/s-cd83588b8b1f05cb\">事件关系与语序\u003c/a>\u003ca data-toc-link href=\"#practice/s-ae670e69128d8e55\">削弱因果推断\u003c/a>\u003ca data-toc-link href=\"#practice/s-73b5da0d39715bb4\">辨认图形接触、相交和公共边\u003c/a>\u003ca data-toc-link href=\"#practice/s-e207f62725dca283\">梳理论证链\u003c/a>\u003ca data-toc-link href=\"#practice/s-ca43cd3fbda05045\">比对概念的外延和分类关系\u003c/a>\u003ca data-toc-link href=\"#practice/s-9f74c42e488abf6f\">比较论证结构\u003c/a>\u003ca data-toc-link href=\"#practice/s-49e530b3a2c0cd4c\">叠加与黑白变化\u003c/a>\u003ca data-toc-link href=\"#practice/s-599d7fb5a061494c\">图形连通与分离\u003c/a>\u003ca data-toc-link href=\"#practice/s-182392c898d56a84\">对象的属性、构成与用途\u003c/a>\u003ca data-toc-link href=\"#practice/s-f3b05c49f6712148\">根据真假数量确定陈述真值\u003c/a>\u003ca data-toc-link href=\"#practice/s-4e6dc1eac45ccce0\">检验样本是否支持总体推断\u003c/a>\u003ca data-toc-link href=\"#practice/s-9f1e8d490dc6971d\">判断证据能否削弱结论\u003c/a>\u003ca data-toc-link href=\"#practice/s-2a7fe675bd0d6265\">图形位置与方向\u003c/a>\u003ca data-toc-link href=\"#practice/s-ba9cd0f2f572724c\">按指标定义计算比值\u003c/a>\u003ca data-toc-link href=\"#practice/s-1e26b8e07773b68a\">数量约束与枚举\u003c/a>\u003ca data-toc-link href=\"#practice/s-db4885a9ca6b54c2\">按规则比较与排序\u003c/a>\u003ca data-toc-link href=\"#practice/s-fbc7bd8e0e436bca\">按图示规则追踪关系\u003c/a>\u003ca data-toc-link href=\"#practice/s-33e33ba24dd315ec\">解释现象与差异\u003c/a>\u003ca data-toc-link href=\"#practice/s-15c5a161061d35d8\">比较图形涂色面积的变化\u003c/a>\u003c/div>\u003c/details>\u003cdetails data-branch=\"module-资料分析\">\u003csummary>资料分析\u003c/summary>\u003cdiv class=\"tocChildren\">\u003ca data-toc-link href=\"#skills/xingce/%E8%B5%84%E6%96%99%E5%88%86%E6%9E%90\">专题概览\u003c/a>\u003ca data-toc-link href=\"#practice/s-e9ffdd08e7f0ec51\">平均数、比值与倍数\u003c/a>\u003ca data-toc-link href=\"#practice/s-f29bc501c32a5bee\">增长量与平均增量\u003c/a>\u003ca data-toc-link href=\"#practice/s-a7ce466b25f8ea1b\">比重、部分与总体\u003c/a>\u003ca data-toc-link href=\"#practice/s-22e0d443f4e8833e\">比较比重与百分点差\u003c/a>\u003ca data-toc-link href=\"#practice/s-rates\">同比、环比与基准期\u003c/a>\u003ca data-toc-link href=\"#practice/s-base\">还原与比较基期量\u003c/a>\u003ca data-toc-link href=\"#practice/s-9d6535a8dad068a9\">分项汇总与时段还原\u003c/a>\u003ca data-toc-link href=\"#practice/s-a28704d6c4e47be4\">按阈值筛选计数\u003c/a>\u003ca data-toc-link href=\"#practice/s-6cfd92b2f027f1a1\">数据与图表匹配\u003c/a>\u003ca data-toc-link href=\"#practice/s-9fc2e5daf6bbb9d8\">按增量或增速推算达标时间\u003c/a>\u003ca data-toc-link href=\"#practice/s-bc3e3cd5b0647c96\">基期与两期比重\u003c/a>\u003ca data-toc-link href=\"#practice/s-f727adc9d8af6663\">年均与跨期增长率\u003c/a>\u003ca data-toc-link href=\"#practice/s-d495edd4c80a44de\">核对指标所需数据与统计范围\u003c/a>\u003ca data-toc-link href=\"#practice/s-ddad42966dfee84f\">指标排序与定位\u003c/a>\u003ca data-toc-link href=\"#practice/s-a889bfbec9cac071\">分项与总体增长率\u003c/a>\u003ca data-toc-link href=\"#practice/s-3a4006f35d6c4142\">集合重叠与余量界限\u003c/a>\u003ca data-toc-link href=\"#practice/s-5e5c8fdd21d132b3\">增长倍数与期末量\u003c/a>\u003ca data-toc-link href=\"#practice/s-747f2e4430a1cd1a\">比较指标差额\u003c/a>\u003ca data-toc-link href=\"#practice/s-a227494d12288056\">增速的百分点差\u003c/a>\u003ca data-toc-link href=\"#practice/s-c0d36320cd06d980\">增长贡献率\u003c/a>\u003c/div>\u003c/details>\u003c/nav>\u003c/aside>\u003csection class=\"results directory\">\u003cdiv class=\"directoryHead\">\u003ch1 tabindex=\"-1\">行测技能\u003c/h1>\u003c/div>\u003cdiv class=\"resultHead\" hidden>\u003cdiv class=\"resultMeta\">\u003cspan id=\"resultCount\" role=\"status\">\u003c/span>\u003c/div>\u003c/div>\u003cdiv id=\"rows\">\u003cdiv class=\"guideIntro\">\u003cp>同样带数字的题，\u003cstrong>数量关系\u003c/strong>侧重把文字条件写成方程或分类计数，\u003cstrong>资料分析\u003c/strong>侧重先从统计材料里定位时期、指标与单位再估算；同样读文字，\u003cstrong>言语理解与表达\u003c/strong>看语境和文段意图，\u003cstrong>判断推理\u003c/strong>看图形规律、题内定义与约束条件。\u003c/p>\u003cp>各模块的专题概览可进入全部真题，也可按考点选题。题后可查相应的\u003ca href=\"#index/class\" data-route=\"index/class\">知识词条\u003c/a>。\u003c/p>\u003c/div>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E6%94%BF%E6%B2%BB%E7%90%86%E8%AE%BA\" href=\"#skills/xingce/%E6%94%BF%E6%B2%BB%E7%90%86%E8%AE%BA\">\u003cstrong>政治理论\u003c/strong>\u003csmall>3 类 · 76 道真题 · 100 道练习册题\u003c/small>\u003cspan>从原卷真题或专项题练习原理对应、政策举措和制度表述。\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"practice/wording\" href=\"#practice/wording\">\u003cstrong>时政措辞辨析\u003c/strong>\u003csmall>6 类 · 44 道真题 · 40 道练习册题\u003c/small>\u003cspan>从许可与义务、目标进度、制度权限等六类关系，辨认一个词怎样改变整句话的意思。\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E5%B8%B8%E8%AF%86%E5%88%A4%E6%96%AD\" href=\"#skills/xingce/%E5%B8%B8%E8%AF%86%E5%88%A4%E6%96%AD\">\u003cstrong>常识判断\u003c/strong>\u003csmall>4 类 · 197 道真题\u003c/small>\u003cspan>从案例判断法律责任，从现象推断科学机制，或用时间、地点核对史实。\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE\" href=\"#skills/xingce/%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE\">\u003cstrong>言语理解与表达\u003c/strong>\u003csmall>13 项技能 · 366 道真题\u003c/small>\u003cspan>结合语境与搭配该选哪个词，哪句话准确概括了文段主旨？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E6%95%B0%E9%87%8F%E5%85%B3%E7%B3%BB\" href=\"#skills/xingce/%E6%95%B0%E9%87%8F%E5%85%B3%E7%B3%BB\">\u003cstrong>数量关系\u003c/strong>\u003csmall>20 项技能 · 190 道真题\u003c/small>\u003cspan>怎样把行程、几何、和差倍比等文字条件写成方程或计数式？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E5%88%A4%E6%96%AD%E6%8E%A8%E7%90%86\" href=\"#skills/xingce/%E5%88%A4%E6%96%AD%E6%8E%A8%E7%90%86\">\u003cstrong>判断推理\u003c/strong>\u003csmall>32 项技能 · 554 道真题 · 2 道练习册题\u003c/small>\u003cspan>给定图形规律、题内定义或多条约束条件，怎样推出唯一结论？\u003c/span>\u003c/a>\u003ca class=\"guideRow\" data-route=\"skills/xingce/%E8%B5%84%E6%96%99%E5%88%86%E6%9E%90\" href=\"#skills/xingce/%E8%B5%84%E6%96%99%E5%88%86%E6%9E%90\">\u003cstrong>资料分析\u003c/strong>\u003csmall>20 项技能 · 346 道真题\u003c/small>\u003cspan>面对统计图表，怎样找准指标、时期与单位并完成增长、比重比较？\u003c/span>\u003c/a>\u003c/div>\u003c/section>\u003c/div>"},"strategy/prep":{"key":"strategy/prep","state":{"route":"strategy/prep"},"title":"备考与临场策略","html":"\u003cdiv class=\"tabBar strategyTabs\">\u003cbutton type=\"button\" id=\"openToc\" aria-controls=\"tocDrawer\" aria-expanded=\"false\" aria-haspopup=\"dialog\">\u003ci aria-hidden=\"true\">\u003c/i>目录\u003c/button>\u003cdiv class=\"sectionTabs\" role=\"tablist\" aria-label=\"应考策略\">\u003ca id=\"tab-prep\" href=\"#strategy/prep\" role=\"tab\" data-tab=\"strategy/prep\" aria-controls=\"studyPanel\" aria-selected=\"true\" tabindex=\"0\">\u003cspan class=\"tabFull\">备考与临场策略\u003c/span>\u003cspan class=\"tabShort\">备考与临场\u003c/span>\u003c/a>\u003ca id=\"tab-themes\" href=\"#strategy/themes\" role=\"tab\" data-tab=\"strategy/themes\" aria-controls=\"studyPanel\" aria-selected=\"false\" tabindex=\"-1\">\u003cspan class=\"tabFull\">申论主题与作答\u003c/span>\u003cspan class=\"tabShort\">申论主题\u003c/span>\u003c/a>\u003c/div>\u003c/div>\u003cdiv class=\"tocLayout\" role=\"tabpanel\" id=\"studyPanel\" aria-labelledby=\"tab-prep\">\u003caside id=\"tocRail\" aria-label=\"备考与临场目录\">\u003ch2>备考与临场目录\u003c/h2>\u003cnav class=\"tocTree\" id=\"tocTree\" aria-label=\"备考与临场目录\">\u003ca data-toc-link href=\"#strategy/prep\" aria-current=\"page\">本页概览\u003c/a>\u003ca data-toc-link href=\"#strategy/prep/select\">选卷与整卷摸底\u003c/a>\u003ca data-toc-link href=\"#strategy/prep/training\">摸底后的分阶段训练\u003c/a>\u003ca data-toc-link href=\"#strategy/prep/timing\">考场节奏与时间分配\u003c/a>\u003ca data-toc-link href=\"#strategy/prep/review\">错因拆解与换题复测\u003c/a>\u003c/nav>\u003c/aside>\u003carticle class=\"reader strategyReader \">\u003ch1 tabindex=\"-1\">备考与临场策略\u003c/h1>\u003cp class=\"strategyLead\">一套真题的备考过程落在四个节点：核对报考卷别并摸底、按薄弱环节分阶段训练、在限时内切分作答时间、做完后拆解错因并换题复测。\u003c/p>\u003csection class=\"strategySituations\" aria-label=\"按处境进入\">\u003ch2>按处境进入\u003c/h2>\u003cdiv class=\"situationGrid\">\u003ca class=\"situationRow\" href=\"#strategy/prep/select\" data-route=\"strategy/prep/select\">\u003cstrong>还没做过目标卷\u003c/strong>\u003cspan>核对报考职位对应的考试类别与本库收录年份，区分整卷模拟与跨卷合练范围。\u003c/span>\u003c/a>\u003ca class=\"situationRow\" href=\"#strategy/prep/timing\" data-route=\"strategy/prep/timing\">\u003cstrong>做过整卷但时间紧张\u003c/strong>\u003cspan>对照行测120分钟与申论150/180分钟参考切分，查清共用材料题跳题点与作文起笔时刻。\u003c/span>\u003c/a>\u003ca class=\"situationRow\" href=\"#strategy/prep/review\" data-route=\"strategy/prep/review\">\u003cstrong>同类错误反复出现\u003c/strong>\u003cspan>把行测错因拆到读数、口径或计算，把申论漏点拆到阅读、压缩或例证衔接，再换题复测。\u003c/span>\u003c/a>\u003c/div>\u003c/section>\u003csection>\u003ch2>全部栏目\u003c/h2>\u003ca class=\"strategyRow\" href=\"#strategy/prep/select\" data-route=\"strategy/prep/select\">\u003cstrong>选卷与整卷摸底\u003c/strong>\u003csmall class=\"strategyScope\">国考与江苏省考 · 行测与申论\u003c/small>\u003cspan>对照职位类别选取本类整卷，区分可跨卷合练的设问与须回到目标卷的文种任务。\u003c/span>\u003c/a>\u003ca class=\"strategyRow\" href=\"#strategy/prep/training\" data-route=\"strategy/prep/training\">\u003cstrong>摸底后的分阶段训练\u003c/strong>\u003csmall class=\"strategyScope\">行测与申论 · 阶段安排\u003c/small>\u003cspan>依据首次整卷摸底的耗时与失分位置，在行测六模块与申论材料阅读之间分配训练重心。\u003c/span>\u003c/a>\u003ca class=\"strategyRow\" href=\"#strategy/prep/timing\" data-route=\"strategy/prep/timing\">\u003cstrong>考场节奏与时间分配\u003c/strong>\u003csmall class=\"strategyScope\">国考与江苏省考 · 限时作答\u003c/small>\u003cspan>用行测共用材料题定位拖慢整组的具体步骤，用申论小题收笔与作文起笔两个节点校准整卷时间。\u003c/span>\u003c/a>\u003ca class=\"strategyRow\" href=\"#strategy/prep/review\" data-route=\"strategy/prep/review\">\u003cstrong>错因拆解与换题复测\u003c/strong>\u003csmall class=\"strategyScope\">行测与申论 · 模拟复盘\u003c/small>\u003cspan>把笼统的“算错、漏点、写空”拆解到出错步骤，再用同类型陌生真题验证改法是否生效。\u003c/span>\u003c/a>\u003c/section>\u003c/article>\u003c/div>"}},"tabs":["skills/shenlun","index/topic","strategy/themes","index/event"],"strategy":"strategy/prep"}</script>
 <script src="assets/theme.js" defer></script>
 <script>(() => {
  'use strict';
  const $=id=>document.getElementById(id), notice=$('pageNotice'), reload=notice.querySelector('button');
  const pending=new Map(), cache=new Map(), legacy=new Set();
- const revision='1fdcbe2d068d1a70';
- let current, currentView, activeKey, generation=0, waiting=false, fullAt='', pendingPicker,earlyAction;
+ const revision='bac9ef071e37f759';
+ const {homes,tabs:tabQueue,strategy}=JSON.parse($('moduleHomes').textContent);
+ $('moduleHomes').remove();
+ const modulePages=new Set([...Object.keys(homes),...tabQueue]);
+ let current,currentView,activeKey,generation=0,waiting=false,fullAt='',pendingPicker,warming=false;
  window.kbParts={};
  window.kbPageData={};
  const vars={graph:'kbGraph',books:'kbBooks',originals:'kbOriginals',library:'kbLibrary',
   'question-figures':'kbQuestionFigures','question-stems':'kbStems','study-app':'kbStartStudy'};
  function status(message,retry){
+  if($('studySplash')){
+   $('launchStatus').textContent=message||'正在准备学习目录…';
+   const button=$('launchRetry');button.hidden=!retry;button.onclick=retry||null;
+   return;
+  }
   notice.hidden=!message;notice.querySelector('span').textContent=message;
   reload.hidden=!retry;reload.onclick=retry||null;
  }
@@ -115,6 +675,7 @@
   }finally{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}
  }
  function asset(name,priority='auto',signal){
+  if(name.startsWith('views/')&&Object.hasOwn(homes,name.slice(6)))return Promise.resolve(homes[name.slice(6)]);
   if(cache.has(name))return Promise.resolve(cache.get(name));
   if(pending.has(name)){
    const existing=pending.get(name);
@@ -142,6 +703,7 @@
   try{p=decodeURIComponent(raw.split('?')[0]);}catch{return '';}
   if(!p||p==='content')return 'index/class';
   if(p==='skills'||p==='browse-s')return 'skills/xingce';
+  if(p==='strategy')return strategy;
   return p;
  }
  function destination(raw){
@@ -160,24 +722,41 @@
  function routeKey(){
   const raw=location.hash.slice(1),key=address(raw);
   if(fullAt===key||legacy.has(key))return 'full';
-  if(!/^(skills\/(xingce|shenlun)(\/|$)|index\/(class|event|topic)(\/|$)|practice\/[\w-]+(\/[\w-]+)?$|entry\/[\w-]+$)/.test(key) ||
+  if(!/^(skills\/(xingce|shenlun)(\/|$)|index\/(class|event|topic)(\/|$)|(?:practice|strategy)\/[\w-]+(\/[\w-]+)?$|entry\/[\w-]+$)/.test(key) ||
      key.split('/').some(s=>!s||s==='.'||s==='..'||s.includes('\\')))return 'full';
   const d=destination(raw),s=history.state;
   const page=/^(skills|index)\//.test(key)&&s?.route===d?.route && (s.pick||'')===(d.pick||'') && (s.section||'')===(d.section||'')?s.page:1;
   return key+(Number.isSafeInteger(page)&&page>1?'~'+page:'');
  }
- const home=()=>['','#content','#index/class'].includes(location.hash);
- const shell=$('content').innerHTML;
- let fontTimer;
- function deferFont(){
-  clearTimeout(fontTimer);
-  if(navigator.connection?.saveData||/2g/.test(navigator.connection?.effectiveType||''))return;
-  fontTimer=setTimeout(()=>{
-   if(waiting||document.hidden)return;
-   if(location.protocol==='file:'){
-    if(!document.getElementById('offlineTitleFont')){const l=document.createElement('link');l.id='offlineTitleFont';l.rel='stylesheet';l.href='assets/title-font.css';document.head.append(l);}
-   }else $('webTitleFont').media='all';
-  },8000);
+ async function warmTabs(){
+  const connection=navigator.connection;
+  if(warming||connection?.saveData||/2g/.test(connection?.effectiveType||''))return;
+  warming=true;
+  try{
+   while(tabQueue.length && modulePages.has(activeKey) && !waiting && !document.hidden){
+    const key=tabQueue.shift();
+    try{await asset('views/'+key,'low');}catch{/* Selecting the tab will retry. */}
+   }
+  }finally{warming=false;}
+ }
+ function ready(){
+  const splash=$('studySplash');
+  if(!splash){warmTabs();return;}
+  const seq=generation,reader=$('entryDialog').open;
+  const outlet=$(reader?'entryBody':'content');
+  const text='考公突击'+Array.from(outlet.querySelectorAll('h1,h2,h3'),el=>el.textContent).join('');
+  function reveal(){
+   clearTimeout(deadline);
+   if(seq!==generation||!splash.isConnected)return;
+   document.documentElement.removeAttribute('data-launching');
+   $('studyShell').removeAttribute('inert');splash.remove();
+   if(reader)$('closeEntry').focus({preventScroll:true});
+   warmTabs();
+  }
+  // Broken or blocked fonts must still let the user enter a readable, working page.
+  const deadline=setTimeout(reveal,1500);
+  if(document.fonts)document.fonts.load('400 24px "Huiwen ZhengKai"',text).then(reveal,reveal);
+  else reveal();
  }
  function makeGraph(v){
   const nodes={...v.terms},qs={...v.questions};
@@ -213,9 +792,8 @@
    legacy.add(raw);
   }
   if(current && activeKey===key){generation++;waiting=false;current.render();return;}
-  const seq=++generation;waiting=true;current?.cancelPreview();clearTimeout(fontTimer);
-  if(!current && home()){waiting=false;status('');return;}
-  status('正在读取所选页面…');
+  const seq=++generation;waiting=true;current?.cancelPreview();
+  status(modulePages.has(key)?'正在准备学习目录…':'正在读取所选页面…');
   try{
    const app=asset('study-app','high');app.catch(()=>{});
    let view,graph,books=[],originals=[],art={questions:{},materials:{}};
@@ -224,42 +802,32 @@
    }else{
     try{view=await asset('views/'+key,'high');}catch(error){
      // 旧书签交给原路由解析。已登记页面的网络故障留在原处重试。
-     if(name.startsWith('entry/')||name.startsWith('practice/s-')||name.startsWith('skills/')) {
+     if(name.startsWith('entry/')||name.startsWith('practice/s-')||name.startsWith('skills/')||name.startsWith('strategy/')) {
       const aliases=await asset('routes');
       if(aliases[name]){if(seq===generation){history.replaceState(null,'','#'+aliases[name]);return open();}}
      }
      if(error.status===404||location.protocol==='file:'){legacy.add(name);if(seq===generation)return open();}
      throw error;
     }
-    if(!current && view.html && seq===generation){$('content').innerHTML=view.html;status('');}
     graph=makeGraph(view);
    }
    const start=await app;if(seq!==generation)return;
    current?.dispose();current=null;
+   if(!currentView && !$('content').firstElementChild && view?.key.startsWith('entry/'))$('content').innerHTML=homes['index/class'].html;
    window.kbGraph=graph;window.kbOriginals=originals;window.kbBooks=books;
    window.kbQuestionFigures=key==='full'&&cache.has('question-figures')?cache.get('question-figures'):art;
    activeKey=key;currentView=view;waiting=false;status('');
-   current=start(view||null);deferFont();
-   if(earlyAction){const {page,selector}=earlyAction;earlyAction=null;if(page===key)document.querySelector(selector)?.click();}
+   current=start(view||null);
    if(pendingPicker){const [kind,id]=pendingPicker;pendingPicker=null;current.picker(kind,id);}
   }catch(error){if(seq===generation){waiting=false;status('页面资料读取失败。',open);}}
  }
- window.studyPages={asset,remember:(name,value)=>cache.set(name,value),status,address,destination,open,deferFont,pending:()=>waiting,owns:v=>routeKey()===activeKey&&(!v||v===currentView),
-  fullPicker(kind,id){pendingPicker=[kind,id];fullAt=address(location.hash.slice(1));open();},shell};
- const search=$('globalSearch'),toggle=$('openGlobalSearch'),close=$('closeGlobalSearch');
+ window.studyPages={asset,remember:(name,value)=>cache.set(name,value),status,address,destination,open,ready,pending:()=>waiting,owns:v=>routeKey()===activeKey&&(!v||v===currentView),
+  fullPicker(kind,id){pendingPicker=[kind,id];fullAt=address(location.hash.slice(1));open();}};
+ const search=$('globalSearch');
  const compact=matchMedia('(max-width:880px)'),tools=document.querySelector('.headerTools');
  function place(){(compact.matches?$('mobileTools'):search.parentElement).append(tools);}
  place();compact.addEventListener('change',place);
- search.addEventListener('submit',e=>{if(!current){e.preventDefault();location.hash='search?'+new URLSearchParams({q:search.elements.q.value.trim()});}});
- toggle.addEventListener('click',()=>{if(!current){toggle.setAttribute('aria-expanded','true');search.elements.q.focus();}});
- close.addEventListener('click',()=>{if(!current){toggle.setAttribute('aria-expanded','false');toggle.focus();}});
- document.addEventListener('click',e=>{
-  if(current||!waiting)return;
-  const button=e.target.closest('#content button');
-  if(!button||button.disabled)return;
-  const selector=button.id==='openToc'?'#openToc':button.dataset.page?'[data-page="'+button.dataset.page+'"]':'';
-  if(selector){e.preventDefault();earlyAction={page:routeKey(),selector};}
- });
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden && !$('studySplash'))warmTabs();});
  let lastUrl='',lastState;
  function moved(){if(lastUrl===location.href&&lastState===history.state)return;lastUrl=location.href;lastState=history.state;open();}
  window.addEventListener('popstate',moved);window.addEventListener('hashchange',moved);
