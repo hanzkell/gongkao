@@ -1,0 +1,1 @@
+window.kbPageData["materials/a325c75360ebcedc283b10c5"] = {"key":"77ea2c02d9c986c7","value":["题组4","（二）",["98687766ac277f427cd6.pdf",25]],"label":"江苏 2025 A类 行测|题组4","art":{"inline":false,"clips":[{"file":"addc1397f3f67505a31f52b32969bb2148dea3d6bd13b51883c1d41d4cf15e9b.webp","src":["98687766ac277f427cd6.pdf",25],"box":[29.31,545.53,507.91,796.78]}]}};

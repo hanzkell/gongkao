@@ -1,0 +1,1 @@
+window.kbPageData["materials/1b41f3d97572d9e4faaddb07"] = {"key":"6566d4775b0be44c","value":["题组3","（二）",["dfddc59dc6e7d9da5d71.pdf",24]],"label":"国考 2024 行政执法 行测|题组3","art":{"inline":false,"clips":[{"file":"6afce09a75e1976b16a3a46cdac1b8b6d9d8badab498dbd6aa6189a73da1aab5.webp","src":["dfddc59dc6e7d9da5d71.pdf",24],"box":[29.31,294.17,489.91,584.45]}]}};

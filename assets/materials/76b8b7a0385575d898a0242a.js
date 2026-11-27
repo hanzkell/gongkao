@@ -1,0 +1,1 @@
+window.kbPageData["materials/76b8b7a0385575d898a0242a"] = {"key":"692ca6362222b84e","value":["题组5","（二）",["f8fec75f67d6d1ba5759.pdf",24]],"label":"江苏 2024 A类 行测|题组5","art":{"inline":false,"clips":[{"file":"9b075192f624aa51f88f1a0c2e21e639fc1972c67d0fe41b325a1ffea260a0b5.webp","src":["f8fec75f67d6d1ba5759.pdf",24],"box":[29.31,248.4,528.92,573.19]}]}};

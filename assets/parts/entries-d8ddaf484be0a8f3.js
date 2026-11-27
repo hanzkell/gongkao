@@ -1,0 +1,1 @@
+window.kbParts["entries-d8ddaf484be0a8f3"] = {"nodes":{"s-300f89e88263b685":{"sources":[{"id":"ddd96a3c875dfde1","label":"通过转折定位文段重心","topic":"言语理解与表达方法","category":"非时政","text":"标出转折词，分别概括前后两层意思。再看后文如何论证、解释或提出对策，选择能覆盖作者主张的选项。","source":{"doc":"f3ab652d8e31c5bbdabc","first":15,"last":15,"file":"f3ab652d8e31c5bbdabc.pdf","page":15},"basis":"据题目与解析整理"}]}}};

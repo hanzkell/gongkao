@@ -1,0 +1,1 @@
+window.kbParts["entries-ead2c772d4827323"] = {"nodes":{"s-c898afc5816920c2":{"sources":[{"id":"2dbe8ddc694f3a14","label":"归纳多则材料中的成效","topic":"申论方法","category":"非时政","text":"逐则记下谁采取了什么行动、给谁带来了什么变化。合并相同效果，保留各则材料独有的成效，最后按题干要求压缩成一段。","source":{"doc":"e31432d6e63d78de7465","first":1,"last":1,"file":"e31432d6e63d78de7465.pdf","page":1},"basis":"据题目与解析整理"}]}}};

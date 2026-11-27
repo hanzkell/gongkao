@@ -1,0 +1,1 @@
+window.kbPageData["jumps/江苏 2024 B类 申论"] = {"江苏 2024 B类 申论#1":"entry/k-d0f0b3445cf27c16","江苏 2024 B类 申论#2":"entry/k-discretion","江苏 2024 B类 申论#3":"entry/k-eee37a50a884d0c9","江苏 2024 B类 申论#4":"entry/k-2faed307aa6ebc0e"};

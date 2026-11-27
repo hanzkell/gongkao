@@ -1,0 +1,1 @@
+window.kbPageData["materials/b0378201ef2b07b2be34ae0b"] = {"key":"6042f1ec3fcb0466","value":["题组4","（三）\n\n\n\n\n注：上座率",["31f401e91aef8d11365d.pdf",25]],"label":"国考 2025 地市级 行测|题组4","art":{"inline":true,"clips":[{"file":"ff60a352f0b5c37e89b7cfc0840dbcb140ffebae7672fb828f6f747da63579ec.webp","src":["31f401e91aef8d11365d.pdf",25],"box":[29.31,51.08,528.92,737.51]}]}};

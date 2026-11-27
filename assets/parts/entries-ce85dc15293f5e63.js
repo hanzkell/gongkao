@@ -1,0 +1,1 @@
+window.kbParts["entries-ce85dc15293f5e63"] = {"nodes":{"s-ae670e69128d8e55":{"sources":[{"id":"264ebd474a4792dc","label":"用其他解释削弱因果推断","topic":"判断推理方法","category":"非时政","text":"先写出观察到的结果和作者认定的原因。逐项检查是否有另一个因素也能产生该结果，以及材料能否支持这个解释。","source":{"doc":"be17f9afe070cf13a0fb","first":30,"last":31,"file":"be17f9afe070cf13a0fb.pdf","page":30},"basis":"据题目与解析整理"}]}}};

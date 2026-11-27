@@ -1,0 +1,1 @@
+window.kbPageData["materials/35621931cabbf4a588d5c0e8"] = {"key":"2a549b15c92b9e2c","value":["题组3","（二）",["d8efe4e19862104d89c8.pdf",23]],"label":"国考 2025 行政执法 行测|题组3","art":{"inline":false,"clips":[{"file":"2909113f018d35f3389090593a4044f3cda52ee25ceb8adc25d940b6e654c262.webp","src":["d8efe4e19862104d89c8.pdf",23],"box":[29.31,33.81,555.93,343.59]}]}};

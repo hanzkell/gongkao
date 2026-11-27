@@ -1,0 +1,1 @@
+window.kbPageData["materials/2e68a510c604e8dfb6f5e65d"] = {"key":"820e0c714f0a2d81","value":["题组3","（二）",["31f401e91aef8d11365d.pdf",23]],"label":"国考 2025 地市级 行测|题组3","art":{"inline":false,"clips":[{"file":"d88ba693eb8ad042d376df141488d77b75588f50a1c1e0e968f7cbb481f76833.webp","src":["31f401e91aef8d11365d.pdf",24],"box":[29.31,0,555.93,309.08]}]}};

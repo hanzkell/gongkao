@@ -1,0 +1,1 @@
+window.kbPageData["materials/dc8778eb31dca584c6872e74"] = {"key":"cd1b9e5b7f2426e9","value":["题组4","（二）",["503793642e845de9795f.pdf",25]],"label":"国考 2023 副省级 行测|题组4","art":{"inline":false,"clips":[{"file":"50fa00d7e091c74ba15be5ca50ed8339b9932fdca14572e8bcb17f859a6e59cf.webp","src":["503793642e845de9795f.pdf",25],"box":[29.31,265.66,555.93,518.42]}]}};

@@ -1,6 +1,270 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><base href="/gongkao/"><title>考公突击 · 输入访问密钥</title>
-<style>
-:root{color-scheme:light dark;font:17px/1.6 system-ui,sans-serif;color:#213c34;background:#f6f5ee}*{box-sizing:border-box}body{min-height:100svh;margin:0;display:grid;place-items:center;padding:1.5rem}main{width:min(100%,25rem);border-top:4px solid #376351;padding:1.8rem .25rem}h1{font:600 2.4rem/1.2 Georgia,serif;margin:0 0 .65rem}p{margin:.4rem 0 1.7rem}label{display:block;font-size:.92rem;font-weight:600}input,button{font:inherit;width:100%;padding:.72rem;border-radius:.32rem}input{margin:.35rem 0 .8rem;border:1px solid #8d9b91;background:#fff;color:#1c322a}button{background:#285540;color:white;border:0;cursor:pointer;font-weight:600}button:disabled{opacity:.65}#status{min-height:1.5em;margin:.7rem 0 0;font-size:.9rem}input:focus-visible,button:focus-visible{outline:3px solid #658c78;outline-offset:2px}@media(prefers-color-scheme:dark){:root{background:#17201c;color:#e7eee7}input{background:#222d27;color:#f5f5f0}button{background:#a8ceb4;color:#132b20}}
-</style></head>
-<body><main><h1>考公突击</h1><p>首次输入密钥后，此浏览器会记住访问权限。</p><form><label for="code">访问密钥</label><input id="code" type="password" required autocomplete="current-password"><button disabled>打开知识库</button></form><p id="status" role="status" aria-live="polite">正在准备解锁…</p><noscript>请启用 JavaScript 后访问。</noscript></main><script src="gate.js"></script></body></html>
+<html lang="zh-CN">
+<head><script>window.kbProtectedDownloads=true;if(location.pathname.startsWith("/gongkao/"+"read/"))location.replace("/gongkao/"+location.pathname.slice(("/gongkao/"+"read/").length)+location.search+location.hash);</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>考公突击 · 知识与训练</title>
+<script>
+(() => {
+  // 直接从源码目录打开模板时，样式和题库位于发布目录。
+  if (location.pathname.endsWith('/src/web/' + encodeURIComponent('知识与训练模板.html'))) {
+    location.replace('../../dist/index.html' + location.search + location.hash);
+    return;
+  }
+  try {
+    const saved = localStorage.getItem('gongkao.theme.v1');
+    const mode = saved === 'light' || saved === 'dark'
+      ? saved
+      : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = mode;
+  } catch {}
+})();
+</script>
+<link rel="stylesheet" href="assets/study.css">
+<style id="webTitleFont" media="not all">
+@font-face{font-family:"Huiwen ZhengKai";font-style:normal;font-weight:400;font-display:swap;src:local("HuiwenZhengkai-Regular"),local("汇文正楷"),url("assets/title.woff2") format("woff2")}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳到正文</a>
+<header><div class="wrap"><span class="brand">考公突击</span>
+<nav aria-label="学习入口">
+  <a href="#index/class" id="nIndex" aria-current="page">知识<span>索引</span></a>
+  <a href="#skills" id="nSkill">技能<span>训练</span></a>
+  <a href="#strategy" id="nStrategy" data-route="strategy">应考<span>策略</span></a>
+</nav>
+<button type="button" id="openGlobalSearch" class="headerIconBtn" aria-label="打开全库搜索" aria-controls="globalSearch" aria-expanded="false"><i class="searchIcon" aria-hidden="true"></i></button>
+<form id="globalSearch" class="globalSearch" data-global-form role="search">
+  <input name="q" type="search" aria-label="全库搜索" placeholder="全库搜索" autocomplete="off" enterkeyhint="search">
+  <button type="submit" aria-label="搜索"><i class="searchIcon" aria-hidden="true"></i></button>
+  <button type="button" id="closeGlobalSearch" aria-label="收起搜索"><span aria-hidden="true">×</span></button>
+</form>
+<div class="headerTools"><button type="button" class="themeToggle headerIconBtn" data-theme-toggle aria-pressed="false" aria-label="切换为玄墨深色模式" title="切换为玄墨深色模式"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 14.4A8.2 8.2 0 0 1 9.6 3.8a8.2 8.2 0 1 0 10.6 10.6z"/></svg></button><a id="nAbout" class="aboutLink headerIconBtn" href="#about" data-route="about" aria-label="关于与原始资料" title="关于与原始资料"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r=".7" fill="currentColor" stroke="none"/></svg></a></div>
+</div></header>
+<div class="wrap" id="pageNotice" hidden><span role="status"></span> <button class="btn" type="button" hidden>重新读取</button></div>
+<main tabindex="-1" id="content" class="wrap">
+  <section class="results directory" id="startupDirectory">
+    <div class="directoryHead"><h1>知识索引</h1></div>
+    <nav id="startupLinks" aria-label="知识索引">
+      <a class="guideRow" href="#index/class/facts"><strong>事实与事件</strong></a>
+      <a class="guideRow" href="#index/class/concepts"><strong>概念与词义</strong></a>
+      <a class="guideRow" href="#index/class/principles"><strong>原理与机制</strong></a>
+      <a class="guideRow" href="#index/class/rules"><strong>制度与规则</strong></a>
+      <a class="guideRow" href="#index/class/methods"><strong>方法与技能</strong></a>
+      <a class="guideRow" href="#index/class/arguments"><strong>观点与论证</strong></a>
+      <a class="guideRow" href="#index/topic"><strong>主题</strong></a>
+      <a class="guideRow" href="#index/event"><strong>时政</strong></a>
+      <a class="guideRow" href="#index/class/all"><strong>全部知识点</strong></a>
+    </nav>
+  </section>
+</main>
+<footer id="mobileTools" class="wrap" aria-label="站点工具"></footer>
+<dialog id="tocDrawer" aria-labelledby="drawerTitle">
+  <div class="drawerHead"><h2 id="drawerTitle">目录</h2><button id="closeToc" aria-label="关闭目录">关闭</button></div>
+  <div id="drawerSlot"></div>
+</dialog>
+<dialog id="entryDialog" aria-labelledby="entryTitle">
+  <div class="entryTop"><span id="entryKind"></span><button type="button" id="closeEntry" aria-label="关闭知识点" title="关闭"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button></div>
+  <div id="entryScroll" tabindex="0"><article id="entryBody" class="reader"></article></div>
+</dialog>
+<dialog class="dialog" id="dialog"><div class="dialogInside"><div class="dialogHead"><h2 id="dialogTitle"></h2><button class="outline" id="closeDlg">关闭</button></div><label class="searchbox"><i class="lens" aria-hidden="true"></i><input type="search" id="pickSearch" aria-label="搜索关联对象"></label><div class="introRow"><label for="role" class="note">关联方式</label><select id="role" class="relation"><option>直接考查</option><option>解题依据</option></select><span class="note">改动保存在此浏览器</span></div><div class="pickList" id="picks"></div></div></dialog><div role="status" class="toast" id="toast" hidden></div>
+
+
+<script src="assets/theme.js" defer></script>
+<script>(() => {
+ 'use strict';
+ const $=id=>document.getElementById(id), notice=$('pageNotice'), reload=notice.querySelector('button');
+ const pending=new Map(), cache=new Map(), legacy=new Set();
+ const revision='1fdcbe2d068d1a70';
+ let current, currentView, activeKey, generation=0, waiting=false, fullAt='', pendingPicker,earlyAction;
+ window.kbParts={};
+ window.kbPageData={};
+ const vars={graph:'kbGraph',books:'kbBooks',originals:'kbOriginals',library:'kbLibrary',
+  'question-figures':'kbQuestionFigures','question-stems':'kbStems','study-app':'kbStartStudy'};
+ function status(message,retry){
+  notice.hidden=!message;notice.querySelector('span').textContent=message;
+  reload.hidden=!retry;reload.onclick=retry||null;
+ }
+ function scriptData(name,url,priority){
+  return new Promise((resolve,reject)=>{
+   const script=document.createElement('script');script.src=url;script.fetchPriority=priority;
+   const timer=setTimeout(()=>finish(false),30000);
+   function finish(ok){
+    clearTimeout(timer);script.onload=script.onerror=null;script.remove();
+    const part=name.startsWith('parts/')?window.kbParts[name.slice(6)]:window.kbPageData[name];
+    const value=part||window[vars[name]];
+    if(!ok||!value){reject(Error(name));return;}
+    if(part){delete window.kbPageData[name];delete window.kbParts[name.slice(6)];}
+    resolve(value);
+   }
+   script.onload=()=>finish(true);script.onerror=()=>finish(false);document.head.append(script);
+  });
+ }
+ async function readData(name,url,priority,signal){
+  const controller=new AbortController(),cancel=()=>controller.abort();
+  const timer=setTimeout(cancel,30000);
+  signal?.addEventListener('abort',cancel,{once:true});
+  try{
+   if(signal?.aborted)cancel();
+   const response=await fetch(url,{priority,signal:controller.signal});
+   if(!response.ok)throw Object.assign(Error(name),{status:response.status});
+   const body=await response.text(),prefix='window.kbPageData['+JSON.stringify(name)+'] = ';
+   if(!body.startsWith(prefix)||!body.endsWith(';\n'))throw Error(name);
+   return JSON.parse(body.slice(prefix.length,-2));
+  }finally{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}
+ }
+ function asset(name,priority='auto',signal){
+  if(cache.has(name))return Promise.resolve(cache.get(name));
+  if(pending.has(name)){
+   const existing=pending.get(name);
+   if(!signal)return existing.catch(error=>{
+    if(error.name==='AbortError')return asset(name,priority);throw error;
+   });
+   return existing;
+  }
+  const immutable=/^(cards|materials)\//.test(name);
+  const version=immutable?'':'?v='+revision;
+  const url='assets/'+name.split('/').map(encodeURIComponent).join('/')+'.js'+version;
+  const partial=immutable||name.startsWith('views/')||name.startsWith('jumps/');
+  const request=partial && location.protocol!=='file:'?readData(name,url,priority,signal):scriptData(name,url,priority);
+  const promise=request.then(value=>{
+   if(partial && cache.size>=72){
+    const oldest=[...cache.keys()].find(k=>/^(views|cards|materials)\//.test(k));
+    if(oldest)cache.delete(oldest);
+   }
+   cache.set(name,value);return value;
+  }).finally(()=>pending.delete(name));
+  pending.set(name,promise);return promise;
+ }
+ function address(raw){
+  let p;
+  try{p=decodeURIComponent(raw.split('?')[0]);}catch{return '';}
+  if(!p||p==='content')return 'index/class';
+  if(p==='skills'||p==='browse-s')return 'skills/xingce';
+  return p;
+ }
+ function destination(raw){
+  const key=address(raw);
+  if(key.startsWith('skills/')||key.startsWith('index/')){
+   const [area,kind,pick='',section='']=key.split('/');
+   return {route:area+'/'+kind,pick,section,...(kind==='event'&&/^\d{4}$/.test(pick)?{year:pick}:{})};
+  }
+  if(key.startsWith('practice/')||key.startsWith('entry/')){
+   const q=new URLSearchParams(raw.split('?')[1]).get('qid');
+   return q?{route:key,question:q,scrollQuestion:true}:{route:key};
+  }
+  if(/^(search|library)(?:\?|$)/.test(raw))return {route:'library',filters:Object.fromEntries(new URLSearchParams(raw.split('?')[1]))};
+  return key==='about'||key.startsWith('sources/')||key==='strategy'||key.startsWith('strategy/')?{route:key}:null;
+ }
+ function routeKey(){
+  const raw=location.hash.slice(1),key=address(raw);
+  if(fullAt===key||legacy.has(key))return 'full';
+  if(!/^(skills\/(xingce|shenlun)(\/|$)|index\/(class|event|topic)(\/|$)|practice\/[\w-]+(\/[\w-]+)?$|entry\/[\w-]+$)/.test(key) ||
+     key.split('/').some(s=>!s||s==='.'||s==='..'||s.includes('\\')))return 'full';
+  const d=destination(raw),s=history.state;
+  const page=/^(skills|index)\//.test(key)&&s?.route===d?.route && (s.pick||'')===(d.pick||'') && (s.section||'')===(d.section||'')?s.page:1;
+  return key+(Number.isSafeInteger(page)&&page>1?'~'+page:'');
+ }
+ const home=()=>['','#content','#index/class'].includes(location.hash);
+ const shell=$('content').innerHTML;
+ let fontTimer;
+ function deferFont(){
+  clearTimeout(fontTimer);
+  if(navigator.connection?.saveData||/2g/.test(navigator.connection?.effectiveType||''))return;
+  fontTimer=setTimeout(()=>{
+   if(waiting||document.hidden)return;
+   if(location.protocol==='file:'){
+    if(!document.getElementById('offlineTitleFont')){const l=document.createElement('link');l.id='offlineTitleFont';l.rel='stylesheet';l.href='assets/title-font.css';document.head.append(l);}
+   }else $('webTitleFont').media='all';
+  },8000);
+ }
+ function makeGraph(v){
+  const nodes={...v.terms},qs={...v.questions};
+  if(v.node)nodes[v.node.id]=v.node;
+  return {nodes,qs,mats:{},missing:{},catalog:{},reviewSources:v.references||{},redirects:{},
+   training:{行测:[],申论:[]},strategies:{groups:[]},study:{topics:v.topics||[],events:[],questionUnits:v.units||{}},
+   wording:{groups:[],sources:v.sources||{}},practiceSyllabus:{modules:{},skills:{}},parts:{papers:{},entries:{}}};
+ }
+ function manualFor(key){
+  try{
+   const edges=JSON.parse(localStorage.getItem('gongkao.knowledge-training.v1')||'{}').manual||[];
+   return edges.some(e=>key.endsWith('/'+e.n)||key==='index/class/all');
+  }catch{return false;}
+ }
+ async function open(){
+  const name=address(location.hash.slice(1));
+  if(fullAt && fullAt!==name)fullAt='';
+  if(manualFor(name))fullAt=name;
+  const key=routeKey();
+  const raw=location.hash.slice(1);
+  if(raw.startsWith('question=') && !legacy.has(raw)){
+   let id;try{id=decodeURIComponent(raw.slice(9));}catch{}
+   const at=id?.lastIndexOf('#')??-1;
+   if(at>0 && !/[\\/]/.test(id)){
+    const seq=++generation;waiting=true;status('正在读取题目…');
+    try{
+     const map=await asset('jumps/'+id.slice(0,at),'high');
+     if(seq!==generation)return;
+     const target=map[id];
+     if(target){history.replaceState(null,'','#'+(target==='library'?'search':target)+'?qid='+encodeURIComponent(id));return open();}
+    }catch(error){if(seq!==generation)return;if(error.status && error.status!==404){waiting=false;status('题目读取失败。',open);return;}}
+   }
+   legacy.add(raw);
+  }
+  if(current && activeKey===key){generation++;waiting=false;current.render();return;}
+  const seq=++generation;waiting=true;current?.cancelPreview();clearTimeout(fontTimer);
+  if(!current && home()){waiting=false;status('');return;}
+  status('正在读取所选页面…');
+  try{
+   const app=asset('study-app','high');app.catch(()=>{});
+   let view,graph,books=[],originals=[],art={questions:{},materials:{}};
+   if(key==='full'){
+    [graph,books,originals]=await Promise.all(['graph','books','originals'].map(n=>asset(n)));
+   }else{
+    try{view=await asset('views/'+key,'high');}catch(error){
+     // 旧书签交给原路由解析。已登记页面的网络故障留在原处重试。
+     if(name.startsWith('entry/')||name.startsWith('practice/s-')||name.startsWith('skills/')) {
+      const aliases=await asset('routes');
+      if(aliases[name]){if(seq===generation){history.replaceState(null,'','#'+aliases[name]);return open();}}
+     }
+     if(error.status===404||location.protocol==='file:'){legacy.add(name);if(seq===generation)return open();}
+     throw error;
+    }
+    if(!current && view.html && seq===generation){$('content').innerHTML=view.html;status('');}
+    graph=makeGraph(view);
+   }
+   const start=await app;if(seq!==generation)return;
+   current?.dispose();current=null;
+   window.kbGraph=graph;window.kbOriginals=originals;window.kbBooks=books;
+   window.kbQuestionFigures=key==='full'&&cache.has('question-figures')?cache.get('question-figures'):art;
+   activeKey=key;currentView=view;waiting=false;status('');
+   current=start(view||null);deferFont();
+   if(earlyAction){const {page,selector}=earlyAction;earlyAction=null;if(page===key)document.querySelector(selector)?.click();}
+   if(pendingPicker){const [kind,id]=pendingPicker;pendingPicker=null;current.picker(kind,id);}
+  }catch(error){if(seq===generation){waiting=false;status('页面资料读取失败。',open);}}
+ }
+ window.studyPages={asset,remember:(name,value)=>cache.set(name,value),status,address,destination,open,deferFont,pending:()=>waiting,owns:v=>routeKey()===activeKey&&(!v||v===currentView),
+  fullPicker(kind,id){pendingPicker=[kind,id];fullAt=address(location.hash.slice(1));open();},shell};
+ const search=$('globalSearch'),toggle=$('openGlobalSearch'),close=$('closeGlobalSearch');
+ const compact=matchMedia('(max-width:880px)'),tools=document.querySelector('.headerTools');
+ function place(){(compact.matches?$('mobileTools'):search.parentElement).append(tools);}
+ place();compact.addEventListener('change',place);
+ search.addEventListener('submit',e=>{if(!current){e.preventDefault();location.hash='search?'+new URLSearchParams({q:search.elements.q.value.trim()});}});
+ toggle.addEventListener('click',()=>{if(!current){toggle.setAttribute('aria-expanded','true');search.elements.q.focus();}});
+ close.addEventListener('click',()=>{if(!current){toggle.setAttribute('aria-expanded','false');toggle.focus();}});
+ document.addEventListener('click',e=>{
+  if(current||!waiting)return;
+  const button=e.target.closest('#content button');
+  if(!button||button.disabled)return;
+  const selector=button.id==='openToc'?'#openToc':button.dataset.page?'[data-page="'+button.dataset.page+'"]':'';
+  if(selector){e.preventDefault();earlyAction={page:routeKey(),selector};}
+ });
+ let lastUrl='',lastState;
+ function moved(){if(lastUrl===location.href&&lastState===history.state)return;lastUrl=location.href;lastState=history.state;open();}
+ window.addEventListener('popstate',moved);window.addEventListener('hashchange',moved);
+ open();
+})();
+</script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>setTimeout(()=>navigator.serviceWorker.register('worker.js',{scope:'./'}).catch(()=>{}),1000),{once:true});</script></body>
+</html>

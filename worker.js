@@ -26,7 +26,7 @@ async function saveKey(key){
   });
 }
 async function remote(relative){
-  const res=await fetch(new URL(relative,scope),{cache:relative.startsWith('vault/')?'default':'no-store',credentials:'omit',redirect:'error'});
+  const res=await fetch(new URL(relative,scope),{cache:relative.startsWith('vault/')?'force-cache':'no-store',credentials:'omit',redirect:'error'});
   if(!res.ok)throw Object.assign(Error('发布文件读取失败，请稍后重试。'),{status:res.status});
   return res;
 }
@@ -83,7 +83,15 @@ async function access(data){
   await saveKey(key);statePromise=Promise.resolve(result);return true;
 }
 self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));
-self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+self.addEventListener('activate',e=>e.waitUntil((async()=>{
+  await self.clients.claim();
+  for(const client of await self.clients.matchAll({type:'window'})){
+    const url=new URL(client.url);
+    if(url.origin===scope.origin && url.pathname.startsWith(readPath) && ['','index.html','search.html','non-current.html'].includes(url.pathname.slice(readPath.length))){
+      url.pathname=scope.pathname+url.pathname.slice(readPath.length);await client.navigate(url.href).catch(()=>{});
+    }
+  }
+})()));
 self.addEventListener('message',e=>{
   const port=e.ports[0];
   if(!port||!e.source?.url)return;
@@ -94,9 +102,14 @@ self.addEventListener('message',e=>{
 function reply(body,status,headers={}){return new Response(body,{status,headers:{'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff',...headers}});}
 async function serve(req,url){
   const name=decodeURIComponent(url.pathname.slice(readPath.length))||'index.html';
-  const currentState=await current(req.mode==='navigate');
+  if(name.split('/').some(p=>!p || p==='.' || p==='..' || p.includes('\\')))return reply(null,404);
+  if(!/^(pdfs|docs|exports)\//.test(name)){
+    const target=new URL(name.split('/').map(encodeURIComponent).join('/'),scope);
+    target.search=url.search;return Response.redirect(target.href,302);
+  }
+  const currentState=await current();
   if(!currentState){
-    if(req.mode==='navigate')return reply(await (await remote('index.html')).text(),200,{'Content-Type':'text/html; charset=utf-8'});
+    if(req.mode==='navigate')return reply(await (await remote('download.html')).text(),200,{'Content-Type':'text/html; charset=utf-8'});
     return reply(null,403);
   }
   const record=Object.prototype.hasOwnProperty.call(currentState.files,name)&&currentState.files[name];
@@ -118,8 +131,35 @@ async function serve(req,url){
   }
   return reply(req.method==='HEAD'?null:bytes,200,{...headers,'Content-Length':length});
 }
+const studyCache='gongkao-study:'+scope.pathname;
+let cacheWrites=0;
+async function cachedAsset(event){
+  const req=event.request;
+  let cache;
+  try{cache=await caches.open(studyCache);const hit=await cache.match(req);if(hit)return hit;}catch{}
+  const response=await fetch(req);
+  if(cache && response.ok){
+    const copy=response.clone();
+    event.waitUntil((async()=>{
+      await cache.put(req,copy);
+      if(cacheWrites++%24===0){
+        const keys=await cache.keys();
+        await Promise.all(keys.slice(0,Math.max(0,keys.length-192)).map(key=>cache.delete(key)));
+      }
+    })().catch(()=>{}));
+  }
+  return response;
+}
 self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
-  if(url.origin===scope.origin&&url.pathname.startsWith(readPath)&&['GET','HEAD'].includes(e.request.method))
+  if(url.origin!==scope.origin||!url.pathname.startsWith(scope.pathname))return;
+  if(url.pathname.startsWith(readPath)&&['GET','HEAD'].includes(e.request.method)){
     e.respondWith(serve(e.request,url).catch(()=>reply('文件暂时无法加载，请重新打开站点。',503,{'Content-Type':'text/plain; charset=utf-8'})));
+    return;
+  }
+  const relative=url.pathname.slice(scope.pathname.length);
+  if(e.request.method==='GET' && (/^assets\/((?:cards|materials)\/[a-f0-9]{24}\.js|figures\/[a-f0-9]{64}\.webp)$/.test(relative) ||
+      (/^assets\/(views\/.+|study-app)\.js$/.test(relative)&&/^[a-f0-9]{16}$/.test(url.searchParams.get('v')||'')))){
+    e.respondWith(cachedAsset(e));
+  }
 });

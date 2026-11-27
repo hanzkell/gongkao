@@ -1,0 +1,1 @@
+window.kbPageData["materials/7d9c555f309facd1e64301ba"] = {"key":"eb4c8afe438093af","value":["题组3","（一）",["a566fec37e508ca7f975.pdf",24]],"label":"国考 2024 副省级 行测|题组3","art":{"inline":false,"clips":[{"file":"11664568c44f6dc61b783042b8296dec85436c223d1d63504afa732c2b8b6977.webp","src":["a566fec37e508ca7f975.pdf",24],"box":[29.31,264.91,489.91,555.18]}]}};

@@ -1,0 +1,1 @@
+window.kbPageData["materials/a65866e518e61508ada36443"] = {"key":"a693a205302a5e56","value":["题组4","（二）",["3f1ec77ae8a18519b57e.pdf",24]],"label":"江苏 2024 C类 行测|题组4","art":{"inline":false,"clips":[{"file":"29f7b512037a6e1ccc4856889914136d894bb5596ba4881ae0b7e7f490030d04.webp","src":["3f1ec77ae8a18519b57e.pdf",25],"box":[29.31,0,528.92,324.09]}]}};

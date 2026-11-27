@@ -1,0 +1,1 @@
+window.kbPageData["materials/effb2d5138c8d937d5c8752b"] = {"key":"ccaccb698162176b","value":["题组2","（一）",["857378cf496f27296500.pdf",21]],"label":"国考 2023 行政执法 行测|题组2","art":{"inline":false,"clips":[{"file":"98887742fa20ce9dc382033692449a3107c3b698b2d3f7376d9213f25d3a46d4.webp","src":["857378cf496f27296500.pdf",21],"box":[29.31,562.04,555.93,814.79]}]}};

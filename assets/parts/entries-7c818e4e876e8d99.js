@@ -1,0 +1,1 @@
+window.kbParts["entries-7c818e4e876e8d99"] = {"nodes":{"s-4d945e4b584e20e6":{"sources":[{"id":"9e4ed0684594686f","label":"用工作总量相等列工程方程","topic":"数量关系方法","category":"非时政","text":"把施工过程按人员或效率发生变化的时点拆开，算出每段实际工作量。同一工程的几种安排都能用同一个总量表示，据此列方程。","source":{"doc":"f3ab652d8e31c5bbdabc","first":20,"last":20,"file":"f3ab652d8e31c5bbdabc.pdf","page":20},"basis":"据题目与解析整理"}]}}};

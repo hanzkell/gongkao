@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>考公突击</title>
+<script>
+const mount='/gongkao/',path=location.pathname.slice(mount.length).replace(/^read\//,'');
+if(/^(pdfs|docs|exports)\//.test(path)){
+ location.replace(mount+'download.html?file='+encodeURIComponent(decodeURIComponent(path))+location.hash);
+}else if(['','index.html','search.html','non-current.html'].includes(path)){
+ location.replace(mount+path+location.search+location.hash);
+}
+</script></head><body><a href="/gongkao/">打开学习目录</a></body></html>

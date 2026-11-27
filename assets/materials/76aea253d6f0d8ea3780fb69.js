@@ -1,0 +1,1 @@
+window.kbPageData["materials/76aea253d6f0d8ea3780fb69"] = {"key":"a219ab711a3b0b8a","value":["题组2","（一）",["64bc3a15d27a04e94940.pdf",21]],"label":"国考 2023 地市级 行测|题组2","art":{"inline":false,"clips":[{"file":"2a17a4ee42247fe2eaf9a7764aaaa301a6d60bccf0f422e50c3e35e16b8940b7.webp","src":["64bc3a15d27a04e94940.pdf",22],"box":[29.31,0,555.93,371.36]}]}};

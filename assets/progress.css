@@ -1,0 +1,6 @@
+.progress-tools {max-width:70rem;margin:1.5rem auto;padding:.7rem 1rem;color:var(--muted,#6f5f56)}
+.progress-tools summary {cursor:pointer;width:fit-content}
+[data-progress-key] button {font:inherit;cursor:pointer;margin:.6rem .5rem .2rem 0;padding:.35rem .65rem;border:1px solid var(--line,#ddd2c2);border-radius:4px;background:var(--soft,#f3ece0);color:var(--ink,#241916)}
+[data-progress-key] button:hover {background:var(--tint,#efe3d2)}
+[data-progress-key] [role=status] {margin-inline:.3rem}
+.migration {max-width:36rem;margin:12vh auto;padding:1rem;font:1rem/1.65 system-ui,sans-serif;color:var(--body,#3d2f2a)}
