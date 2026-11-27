@@ -1,7 +1,7 @@
 'use strict';
 const scope=new URL(self.registration.scope),readPath=scope.pathname+'read/';
 const dbName='gongkao-access:'+scope.pathname, encoder=new TextEncoder();
-let dbPromise,statePromise;
+let dbPromise,statePromise,manifestCiphertext;
 function database(){
   if(!dbPromise)dbPromise=new Promise((resolve,reject)=>{
     const req=indexedDB.open(dbName,1);
@@ -27,14 +27,25 @@ async function saveKey(key){
 }
 async function remote(relative){
   const res=await fetch(new URL(relative,scope),{cache:relative.startsWith('vault/')?'default':'no-store',credentials:'omit',redirect:'error'});
-  if(!res.ok)throw Error('发布文件读取失败，请稍后重试。');
+  if(!res.ok)throw Object.assign(Error('发布文件读取失败，请稍后重试。'),{status:res.status});
   return res;
 }
 async function config(){return (await remote('version.json')).json();}
+async function cipherBytes(id){
+  const path='vault/'+id+'.bin';
+  try{return new Uint8Array(await (await remote(path)).arrayBuffer());}
+  catch(error){
+    if(error.status && error.status<500)throw error;
+    return new Uint8Array(await (await remote(path)).arrayBuffer());
+  }
+}
 async function decrypt(key,id,label){
   if(!/^[a-f0-9]{64}$/.test(id))throw Error('发布清单无效。');
-  const bytes=new Uint8Array(await (await remote('vault/'+id+'.bin')).arrayBuffer());
-  return crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.subarray(0,12),additionalData:encoder.encode(label)},key,bytes.subarray(12));
+  const reuse=label==='manifest' && manifestCiphertext?.id===id;
+  const bytes=reuse?manifestCiphertext.bytes:await cipherBytes(id);
+  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.subarray(0,12),additionalData:encoder.encode(label)},key,bytes.subarray(12));
+  if(label==='manifest' && !reuse)manifestCiphertext={id,bytes};
+  return plain;
 }
 async function unlockState(key,version){
   if(!key)return null;
@@ -42,7 +53,11 @@ async function unlockState(key,version){
   catch(e){if(e.name==='OperationError')return null;throw e;}
 }
 async function current(force=false){
-  if(!statePromise||force)statePromise=Promise.all([rememberedKey(),config()]).then(([key,version])=>unlockState(key,version)).catch(e=>{statePromise=undefined;throw e;});
+  if(!statePromise||force){
+    const state=rememberedKey().then(async key=>key?unlockState(key,await config()):null);
+    statePromise=state;
+    state.catch(()=>{if(statePromise===state)statePromise=undefined;});
+  }
   return statePromise;
 }
 async function access(data){
@@ -70,12 +85,16 @@ async function serve(req,url){
     if(req.mode==='navigate')return reply(await (await remote('index.html')).text(),200,{'Content-Type':'text/html; charset=utf-8'});
     return reply(null,403);
   }
-  const record=Object.hasOwn(currentState.files,name)&&currentState.files[name];
+  const record=Object.prototype.hasOwnProperty.call(currentState.files,name)&&currentState.files[name];
   if(!record)return reply(null,404);
-  const [id,type]=record;
-  const bytes=await decrypt(currentState.key,id,name), length=bytes.byteLength;
+  const [id,type,gzip]=record;
   const headers={'Content-Type':type,'Accept-Ranges':'bytes'};
   const range=req.headers.get('Range');
+  if(gzip && !range && req.method==='GET' && typeof DecompressionStream==='function'){
+    const bytes=await decrypt(currentState.key,gzip,name+'|gzip');
+    return reply(new Response(bytes).body.pipeThrough(new DecompressionStream('gzip')),200,headers);
+  }
+  const bytes=await decrypt(currentState.key,id,name), length=bytes.byteLength;
   if(range){
     const match=/^bytes=(\d*)-(\d*)$/.exec(range);
     const start=match?.[1]?Number(match[1]):Math.max(0,length-Number(match?.[2]));

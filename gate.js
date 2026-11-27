@@ -13,15 +13,22 @@ async function request(worker,op,password){
     worker.postMessage({op,password},[channel.port2]);
   });
 }
-(async()=>{
-  if(!('serviceWorker' in navigator)||!crypto.subtle)throw Error('请使用支持 HTTPS 和本地存储的现代浏览器打开。');
-  await navigator.serviceWorker.register(new URL('worker.js',base),{scope:base.pathname,updateViaCache:'none'});
-  const registration=await navigator.serviceWorker.ready;
-  if(!navigator.serviceWorker.controller)await new Promise(resolve=>{
-    function changed(){if(!navigator.serviceWorker.controller)return;navigator.serviceWorker.removeEventListener('controllerchange',changed);resolve();}
+async function connect(){
+  const script=new URL('worker.js',base);
+  await navigator.serviceWorker.register(script,{scope:base.pathname,updateViaCache:'none'});
+  await navigator.serviceWorker.ready;
+  const controlsSite=()=>navigator.serviceWorker.controller?.scriptURL===script.href;
+  if(!controlsSite())await new Promise(resolve=>{
+    function changed(){if(!controlsSite())return;navigator.serviceWorker.removeEventListener('controllerchange',changed);resolve();}
     navigator.serviceWorker.addEventListener('controllerchange',changed);changed();
   });
-  const worker=registration.active;
+  return navigator.serviceWorker.controller;
+}
+(async()=>{
+  if(!('serviceWorker' in navigator)||!globalThis.crypto?.subtle)throw Error('此浏览器无法打开加密站点，请在支持 HTTPS、Service Worker 和本地存储的浏览器中打开。');
+  let timer;
+  const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('浏览器未能启动站点服务。请刷新重试，或在系统浏览器中打开。')),30000);});
+  const worker=await Promise.race([connect(),timeout]).finally(()=>clearTimeout(timer));
   if(await request(worker,'remembered')){openContent();return;}
   statusLine.textContent='';button.disabled=false;input.focus();
   form.addEventListener('submit',async e=>{
