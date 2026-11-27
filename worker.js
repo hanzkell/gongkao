@@ -41,15 +41,29 @@ async function cipherBytes(id){
 }
 async function decrypt(key,id,label){
   if(!/^[a-f0-9]{64}$/.test(id))throw Error('发布清单无效。');
-  const reuse=label==='manifest' && manifestCiphertext?.id===id;
+  const isManifest=label==='manifest'||label==='manifest|gzip';
+  const reuse=isManifest && manifestCiphertext?.id===id;
   const bytes=reuse?manifestCiphertext.bytes:await cipherBytes(id);
   const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.subarray(0,12),additionalData:encoder.encode(label)},key,bytes.subarray(12));
-  if(label==='manifest' && !reuse)manifestCiphertext={id,bytes};
+  if(isManifest && !reuse)manifestCiphertext={id,bytes};
   return plain;
+}
+function gunzip(bytes){
+  return new Response(bytes).body.pipeThrough(new DecompressionStream('gzip'));
 }
 async function unlockState(key,version){
   if(!key)return null;
-  try{return {key,files:JSON.parse(new TextDecoder().decode(await decrypt(key,version.manifest,'manifest')))};}
+  try{
+    if(version.manifestGzip && typeof DecompressionStream==='function'){
+      try{
+        const bytes=await decrypt(key,version.manifestGzip,'manifest|gzip');
+        return {key,files:await new Response(gunzip(bytes)).json()};
+      }catch(error){
+        if(error.name==='OperationError')throw error;
+      }
+    }
+    return {key,files:JSON.parse(new TextDecoder().decode(await decrypt(key,version.manifest,'manifest')))};
+  }
   catch(e){if(e.name==='OperationError')return null;throw e;}
 }
 async function current(force=false){
@@ -92,7 +106,7 @@ async function serve(req,url){
   const range=req.headers.get('Range');
   if(gzip && !range && req.method==='GET' && typeof DecompressionStream==='function'){
     const bytes=await decrypt(currentState.key,gzip,name+'|gzip');
-    return reply(new Response(bytes).body.pipeThrough(new DecompressionStream('gzip')),200,headers);
+    return reply(gunzip(bytes),200,headers);
   }
   const bytes=await decrypt(currentState.key,id,name), length=bytes.byteLength;
   if(range){
